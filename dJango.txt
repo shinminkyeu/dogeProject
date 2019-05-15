@@ -1,0 +1,45 @@
+MTV 패턴 == MVC
+
+Model
+    강아지
+        uint32 birth        //유닉스 타임
+        KIND kind           //종류
+        bool gender         //성별
+        bool alive          //생존여부 ---- 솔리디티 강아지 모델
+        SIZE size           //강아지 크기
+        integer[] images    //강아지 사진
+
+    회원
+        string name
+        string contact
+        string address
+
+    거래
+        uint32 dogId       //강아지id => id로 Dapp을 통해 정보 조회 가능
+        uint8 price
+        STATE state        //enum 생각중
+        address owner      //분양 희망자의 지갑 주소. => id와 같은 개념
+        address buyer      //분양 희망자의 지갑 주소. => id와 같은 개념
+        string content
+        image[] image
+
+        
+
+View == Controller
+    강아지
+        강아지 조회            //int형으로 조회      
+        강아지 등록            //새끼견은 어미견 소유자만
+        강아지 사진 추가        //DB or FileSystem indexList로 저장 
+        거래 내역 보기          // 강아지 추적
+        부모 강아지 등록하기      // 부모견이 현재 소유주의 견이 아닐때 발동
+    
+    회원
+        회원정보 수정
+        거래 내역 보기          //회원 추적
+        강아지 분양하기
+        부모 강아지 등록 승인하기  // 메시지 오면 승인 or 거부
+
+    거래
+        예약 신청하기
+        예약 확인하기
+        거래 완료

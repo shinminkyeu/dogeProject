@@ -1,0 +1,37 @@
+강아지 정보 
+    : uint32 birth;
+    : KIND kind;
+    : bool gender;
+    : bool alive; 
+
+함수
+    private :
+        강아지 등록
+        부모견 등록
+        자식견 등록
+    public :
+        강아지 정보 조회
+        강아지 등록 //조건검사 후 private함수 호출
+        부모견 등록 //조건검사 후 private함수 호출
+        자식견 등록 //조건검사 후 private함수 호출
+        강아지 거래
+        강아지 소유주 조회
+        강아지 부모 조회
+        강아지 자식 조회
+        소유주에 따른 강아지 조회
+
+===============================================================
+거래 정보
+    : uint32 dogId;
+    : uint8 price;
+    : STATE state;
+    : address owner;
+    : address buyer;
+
+함수
+    private :
+
+    public :
+        거래 등록
+        예약 확인
+        거래 완료
