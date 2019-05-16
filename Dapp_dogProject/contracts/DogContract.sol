@@ -10,12 +10,14 @@ contract DogContract {
         string registrationNumber;            //동물보호관리시스템 등록번호
         string rfid;                           //동물보호관리시스템 RFID
     }
+    event newDog(uint _dogId, address _owner);  //개가 등록돼면 발생
+    event registeredParent(string _message, uint _dogId, uint _pDogId);
 
     Dog[] dogs;
     mapping(uint => uint[2]) childToParent;     // 새끼개로 부모개 읽어오기, 0=>어미견, 1=부모견
     mapping(uint => uint[]) parentToChildren;   // 부모개로 새끼개 읽어오기
     mapping(uint => address[]) dogToOwner;      // dogId로 주인 지갑 주소 가져오기
-    mapping(address => uint[]) ownerToDogs;     // 지갑 주소에 따른 개id 가져오기
+    mapping(address => uint) ownerToDogCount; // 지갑 주소에 따른 개id 가져오기
     uint ageRestriction = 6 * 30 * 24 * 3600;   // 성견기준 6개월을 초 단위로.
 
     modifier onlyDogOwner(uint _dogId) {
@@ -30,8 +32,9 @@ contract DogContract {
 
     function _newDog(uint32 _birth, KIND _kind, bool _gender, bool _alive, string memory _regiNo, string memory _rfid) internal returns(uint) {
         uint id = dogs.push(Dog(_birth, _kind, _gender, _alive, _regiNo, _rfid)) - 1;
-        ownerToDogs[msg.sender].push(id);
+        ownerToDogCount[msg.sender]++;
         dogToOwner[id].push(msg.sender);
+        emit newDog(id, msg.sender);
         return id;
     }
 
@@ -40,10 +43,12 @@ contract DogContract {
         if(childToParent[_dogId][0] == 0) {
             childToParent[_dogId][0] = _femaleId;
             parentToChildren[_femaleId].push(_dogId);
+            emit registeredParent("Mom Dog Registered!", _dogId, _femaleId);
         }
         if(childToParent[_dogId][1] == 0) {
             childToParent[_dogId][1] = _maleId;
             parentToChildren[_maleId].push(_dogId);
+            emit registeredParent("Dad Dog Registered!", _dogId, _maleId);
         }
     }
 
@@ -58,7 +63,14 @@ contract DogContract {
     }
 
     function showOwnerToDog(address _user) external view returns(uint[] memory) {
-        return ownerToDogs[_user];
+        uint[] memory result = new uint[](ownerToDogCount[_user]);
+        uint index = 0;
+        for(uint dogId = 0 ; dogId < dogs.length ; dogId++) {
+            if(_currentDogOwner(dogId) == _user) {
+                result[index++] = dogId;
+            }
+        }
+        return result;
     }
 
     function showChildToParent(uint _dogId) external view returns(uint[2] memory) {

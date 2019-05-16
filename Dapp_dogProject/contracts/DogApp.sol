@@ -3,18 +3,30 @@ pragma solidity >=0.4.0 <0.6.0;
 import "./DogContract.sol";
 
 contract DogApp is DogContract {
+    //부모견의 소유주에게 메시지를 보내기 위한 이벤트
+    event approveRegisterParent(uint _dogId, uint _pDogId, address _from, address _to);
 
     function registerDog(uint32 _birth, KIND _kind, bool _gender, bool _alive, string memory _regiNo,
-     string memory _rfid, uint _fatherId, uint _motherId) public{
+     string memory _rfid, uint _fatherId, uint _motherId ) public {
         //_fatherId 또는 _motherId 는 내용이 없다면 0이다.
         uint age = now - _birth;
+        uint momId = _motherId;
+        uint dadId = _fatherId;
         if(age < ageRestriction) {      //성견인지 아닌지 확인(6개월.)
-            assert(_motherId != 0);     //나이가 어리다면, 부모에 대한 id값이 있는지 확인하고 없다면 error를 발생시킨다.
+            require(_motherId != 0, "Register it's mother dog");     //나이가 어리다면, 부모에 대한 id값이 있는지 확인하고 없다면 error를 발생시킨다.
+            require(_currentDogOwner(_motherId) == msg.sender, "mother dog is not yours"); //부모견이 나의 개가 아니라면 error 발생
         }
         uint dogId = _newDog(_birth, _kind, _gender, _alive, _regiNo, _rfid);
-        _registerParents(dogId, _fatherId, _motherId);
+        if(_currentDogOwner(_motherId) != msg.sender) {
+            momId = 0;
+            emit approveRegisterParent(dogId, _motherId, msg.sender, _currentDogOwner(_motherId));
+        }
+        if(_currentDogOwner(_fatherId) != msg.sender) {
+            dadId = 0;
+            emit approveRegisterParent(dogId, _fatherId, msg.sender, _currentDogOwner(_fatherId));
+        }
+        _registerParents(dogId, dadId, momId);
     }
-
     //성견등록자가 다른 소유의 견을 부모로 등록할때 메시지를 보내고, 승인을 받으면, 이 함수 실행.
     function registerParents(uint _dogId, uint _pDogId, address _pDogOwner) public onlyDogOwner(_dogId){
         require(_pDogOwner == _currentDogOwner(_pDogId), "The dog is not his");
@@ -38,8 +50,8 @@ contract DogApp is DogContract {
         //1. msg.sender의 개를 뺀다.
         //2. _to에게 새로운 개를 추가한다.
         //3. _dogId address List 에 따른 주인을 추가한다.
-        //ownerToDogs[msg.sender].delete();
-        ownerToDogs[_to].push(_dogId);
+        ownerToDogCount[msg.sender]--;
+        ownerToDogCount[_to]++;
         dogToOwner[_dogId].push(_to);
     }
 
