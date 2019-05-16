@@ -4,10 +4,12 @@ Block Chain (Ethereum)
     - solidity : >=0.4.0 <0.6.0
     - truffle
     - MetaMask
+    - Infura
 
 Web
     - Framework : dJango
     - DB        : dJango
+    - Connect   : Web3.py
     - EC2(linux): 웹서버 배포
     - S3        : 사진저장
     - HTML      :
