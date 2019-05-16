@@ -1,0 +1,22 @@
+
+
+Block Chain (Ethereum)
+    - solidity : >=0.4.0 <0.6.0
+    - truffle
+    - MetaMask
+
+Web
+    - Framework : dJango
+    - DB        : dJango
+    - EC2(linux): 웹서버 배포
+    - S3        : 사진저장
+    - HTML      :
+    - JavaScript:
+    - CSS       :
+
+
+일정
+    1주차 (~5.17)       : 스마트 컨트랙트 개발(개, 거래)
+    2주차 (5.20 ~ 5.25) : Web 개발 (Back-End, Frond-End)
+    3주차 (5.27 ~ 5.29) : 전체 테스트
+    3주차 (5.29 ~ 5.31) : 프로젝트 문서화.
