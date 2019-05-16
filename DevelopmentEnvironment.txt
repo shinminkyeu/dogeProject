@@ -5,6 +5,7 @@ Block Chain (Ethereum)
     - truffle
     - MetaMask
     - Infura
+        (HTTPProvider : https://mainnet.infura.io/v3/6de59f77f06e447a89d8fecdcbc9017d)
 
 Web
     - Framework : dJango
