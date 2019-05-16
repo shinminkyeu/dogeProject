@@ -12,8 +12,11 @@ contract DogApp is DogContract {
         uint age = now - _birth;
         uint momId = _motherId;
         uint dadId = _fatherId;
+        require(dogs[dadId].birth > _birth, "아빠견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
+        require(dogs[momId].birth > _birth, "엄마견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
         if(age < ageRestriction) {      //성견인지 아닌지 확인(6개월.)
             require(_motherId != 0, "Register it's mother dog");     //나이가 어리다면, 부모에 대한 id값이 있는지 확인하고 없다면 error를 발생시킨다.
+            require(dogs[momId].gender, "It's not female");          //입력된 어미견의 성별이 암컷이 아니라면.
             require(_currentDogOwner(_motherId) == msg.sender, "mother dog is not yours"); //부모견이 나의 개가 아니라면 error 발생
         }
         uint dogId = _newDog(_birth, _kind, _gender, _alive, _regiNo, _rfid);
@@ -44,7 +47,6 @@ contract DogApp is DogContract {
             parentToChildren[_dogId].push(_children[i]);
         }
     }
-
     function distributeDog(uint _dogId, address _to) public onlyDogOwner(_dogId) {
         //개의 소유주 변경 시.
         //1. msg.sender의 개를 뺀다.
@@ -54,15 +56,12 @@ contract DogApp is DogContract {
         ownerToDogCount[_to]++;
         dogToOwner[_dogId].push(_to);
     }
-
     function stateChangeDog(uint _dogId, bool _alive) public onlyDogOwner(_dogId) {
         dogs[_dogId].alive = _alive;
     }
-
     function addRegisterNumber(uint _dogId, string memory _registerNo) public onlyDogOwner(_dogId){
         dogs[_dogId].registrationNumber = _registerNo;
     }
-
     function addRFID(uint _dogId, string memory _rfid) public onlyDogOwner(_dogId){
         dogs[_dogId].rfid = _rfid;
     }
