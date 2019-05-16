@@ -30,7 +30,8 @@ contract DogContract {
         return dogToOwner[_dogId][_currentOwner];
     }
 
-    function _newDog(uint32 _birth, KIND _kind, bool _gender, bool _alive, string memory _regiNo, string memory _rfid) internal returns(uint) {
+    function _newDog(uint32 _birth, KIND _kind, bool _gender, bool _alive,
+     string memory _regiNo, string memory _rfid) internal returns(uint) {
         uint id = dogs.push(Dog(_birth, _kind, _gender, _alive, _regiNo, _rfid)) - 1;
         ownerToDogCount[msg.sender]++;
         dogToOwner[id].push(msg.sender);
@@ -52,14 +53,13 @@ contract DogContract {
         }
     }
 
-    function findDog(uint _dogId) public view returns(uint32, KIND, bool, bool){
+    function findDog(uint _dogId) public view returns(uint32, KIND, bool, bool, string memory, string memory){
         Dog memory result = dogs[_dogId];
-        return (result.birth, result.kind, result.gender, result.alive);
+        return (result.birth, result.kind, result.gender, result.alive, result.registrationNumber, result.rfid);
     }
 
-    function showDogToOwner(uint _dogId) external view returns(uint, KIND, bool, bool) {
-        Dog memory result = dogs[_dogId];
-        return(result.birth, result.kind, result.gender, result.alive);
+    function showDogToOwner(uint _dogId) external view returns(address[] memory) {
+        return dogToOwner[_dogId];
     }
 
     function showOwnerToDog(address _user) external view returns(uint[] memory) {
