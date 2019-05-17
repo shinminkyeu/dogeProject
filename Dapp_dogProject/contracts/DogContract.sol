@@ -1,10 +1,9 @@
 pragma solidity >=0.4.0 <0.6.0;
 
 contract DogContract {
-    enum KIND {CHIWAWA, POODLE}
     struct Dog {
         uint32 birth;   // 유닉스타임 (년월일까지만 00시00분00초)
-        KIND kind;      // enum 으로 인한 종류 설정.(DB와 맞춰야함.)
+        uint8 kind;      // enum 으로 인한 종류 설정.(DB와 맞춰야함.)
         bool gender;    // true = 여자, false = 남자
         bool alive;     // true = 생존, false = 죽음
         string registrationNumber;            //동물보호관리시스템 등록번호
@@ -18,15 +17,24 @@ contract DogContract {
     mapping(uint => address[]) dogToOwner;      // dogId로 주인 지갑 주소 가져오기
     mapping(address => uint) ownerToDogCount;   // 지갑 주소에 따른 개id 가져오기
     uint ageRestriction = 6 * 30 * 24 * 3600;   // 성견기준 6개월을 초 단위로.
+    uint8 kindCount = 10;
+    address me = 0x6347fb458F79309657327F8F4Da647d21d9CF530;
+    modifier onlyProjectOwner() {
+        require(msg.sender == me, "시스템 배포자만 수정할수 있습니다.");
+        _;
+    }
     modifier onlyDogOwner(uint _dogId) {
         require(msg.sender == _currentDogOwner(_dogId), "You are not owner of this dog");
         _;
+    }
+    function changeKindCount(uint8 _value) public onlyProjectOwner(){
+        kindCount = _value;
     }
     function _currentDogOwner(uint _dogId) internal view returns(address){
         uint _currentOwner = dogToOwner[_dogId].length - 1;      //가장 최근index == 현재 견주.
         return dogToOwner[_dogId][_currentOwner];
     }
-    function _newDog(uint32 _birth, KIND _kind, bool _gender, bool _alive,
+    function _newDog(uint32 _birth, uint8 _kind, bool _gender, bool _alive,
      string memory _regiNo, string memory _rfid) internal returns(uint) {
         uint id = dogs.push(Dog(_birth, _kind, _gender, _alive, _regiNo, _rfid)) - 1;
         ownerToDogCount[msg.sender]++;
@@ -47,7 +55,7 @@ contract DogContract {
             emit registeredParent("Dad Dog Registered!", _dogId, _maleId);
         }
     }
-    function findDog(uint _dogId) public view returns(uint32, KIND, bool, bool, string memory, string memory){
+    function findDog(uint _dogId) public view returns(uint32, uint8, bool, bool, string memory, string memory){
         Dog memory result = dogs[_dogId];
         return (result.birth, result.kind, result.gender, result.alive, result.registrationNumber, result.rfid);
     }
