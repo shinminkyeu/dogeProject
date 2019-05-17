@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'contract.apps.ContractConfig',
     'dog.apps.DogConfig',
+    'trade.apps.TradeConfig',
     'user.apps.UserConfig',
     'w3Conn.apps.W3ConnConfig',
     'django.contrib.admin',
