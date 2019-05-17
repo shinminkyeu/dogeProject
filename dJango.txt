@@ -7,7 +7,7 @@ Model
         bool gender         //성별
         bool alive          //생존여부 ---- 솔리디티 강아지 모델
         SIZE size           //강아지 크기
-        integer[] images    //강아지 사진
+        sting[] images      //강아지 사진
 
     회원
         string name
