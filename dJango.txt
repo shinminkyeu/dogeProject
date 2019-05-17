@@ -7,7 +7,7 @@ Model
         bool gender         //성별
         bool alive          //생존여부 ---- 솔리디티 강아지 모델
         SIZE size           //강아지 크기
-        integer[] images    //강아지 사진
+        sting[] images      //강아지 사진
 
     회원
         string name
@@ -22,8 +22,6 @@ Model
         address buyer      //분양 희망자의 지갑 주소. => id와 같은 개념
         string content
         image[] image
-
-        
 
 View == Controller
     강아지
