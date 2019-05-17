@@ -31,7 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'contract.apps.ContractConfig',
     'dog.apps.DogConfig',
+    'user.apps.UserConfig',
+    'w3Conn.apps.W3ConnConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,3 +122,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/picture/'
+MEDIA_ROOT = 'AMAZON_S3_SERVER/picture/'
