@@ -23,8 +23,6 @@ Model
         string content
         image[] image
 
-        
-
 View == Controller
     강아지
         강아지 조회            //int형으로 조회      
