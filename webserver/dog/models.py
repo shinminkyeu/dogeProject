@@ -28,7 +28,7 @@ class Dog(models.Model):
 # 개 사진의 url 테이블.
 class Picture(models.Model):
     dog = models.ForeignKey(Dog, on_delete = models.CASCADE)
-    picture_url = models.ImageField(upload_to =름pic_name_policy)
+    picture_url = models.ImageField(upload_to = pic_name_policy)
 
 # 개 종류의 테이블, 운영자만 수정 가능.
 class Breed(models.Model):
