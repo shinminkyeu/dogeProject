@@ -6,7 +6,7 @@ from django.db import models
 # 개의 사진에 대한 이름 정책. (개 id/사진 일련번호.확장자)
 def pic_name_policy(instance, filename):
     instance.dog.dog_picture_counter += 1
-    return '%s/%s.%s' % (
+    return 'dog_images/%s/%s.%s' % (
         instance.dog.dog_id,
         instance.dog.dog_picture_counter,
         filename.split('.')[-1]

@@ -3,7 +3,7 @@ from django.db import models
 # 거래 이미지에 대한 이름 정책 (거래 id/이미지 일련번호.확장자)
 def img_name_policy(instance, filename):
     instance.trade.trade_img_counter += 1
-    return '%s/%s.%s' % (
+    return 'trade_images/%s/%s.%s' % (
         instance.trade.trade_id,
         instance.trade.trade_img_counter,
         filename.split('.')[-1]
