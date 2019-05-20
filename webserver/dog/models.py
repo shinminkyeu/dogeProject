@@ -3,6 +3,15 @@ import re
 
 from django.db import models
 
+# 개의 사진에 대한 이름 정책. (개 id/사진 일련번호.확장자)
+def pic_name_policy(instance, filename):
+    instance.dog.dog_picture_counter += 1
+    return '%s/%s.%s' % (
+        instance.dog.dog_id,
+        instance.dog.dog_picture_counter,
+        filename.split('.')[-1]
+    )
+
 # 개의 클래스.
 class Dog(models.Model):
     # Contract에서 배정된 개 id
@@ -12,23 +21,14 @@ class Dog(models.Model):
     # 개 대표 사진의 일련번호
     dog_picture_represented = models.PositiveSmallIntegerField()
     # 개의 털길이(Enum)
-    dog_coat_length = models.PositiveSmallIntegerField(null=True, blank=True)
+    dog_coat_length = models.PositiveSmallIntegerField(null = True, blank = True)
     # 개의 털색깔(String)
-    dog_coat_color = models.CharField(max_length=100, null=True, blank=True)
-
-# 개의 사진에 대한 이름 정책. (개 id/사진 일련번호.확장자)
-def pic_name_policy(instance, filename):
-    instance.dog.dog_picture_counter += 1
-    return '%s/%s.%s' % (
-        instance.dog.dog_id,
-        instance.dog.dog_picture_counter,
-        filename.split('.')[-1]
-        )
+    dog_coat_color = models.CharField(max_length = 100, null = True, blank = True)
 
 # 개 사진의 url 테이블.
 class Picture(models.Model):
-    dog = models.ForeignKey(Dog, on_delete=models.CASCADE)
-    picture_url = models.ImageField(upload_to=pic_name_policy)
+    dog = models.ForeignKey(Dog, on_delete = models.CASCADE)
+    picture_url = models.ImageField(upload_to =름pic_name_policy)
 
 # 개 종류의 테이블, 운영자만 수정 가능.
 class Breed(models.Model):

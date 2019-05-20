@@ -1,0 +1,18 @@
+개 등록시 form 속성 :
+    - 강아지 생일 : Date
+    - 강아지 품종 : Select
+    - 강아지 성별 : Select
+    - 동물등록번호 : Text
+    - RFID : Text
+    - 사진 : Image (File)
+    - 대표사진 : Select
+
+사용자 등록시 form 속성 :
+    - 이름 : Text
+    - 전화번호 : TelePhone (Text)
+
+거래 등록시 form 속성 :
+    - 강아지 : Select
+    - 가격 : Number (Text)
+    - 분양글 : TextArea
+    - 분양글 사진 : Image (File)

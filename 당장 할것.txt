@@ -1,1 +1,3 @@
-진정호 : Trade 및 Dog에 대한 Form 구축
+신민규 : 아마존 S3 연동
+진정호 : Trade 및 Dog에 대한 Form 구축(web.txt에 Form 형식 작성) web3.py 적용 테스트
+김영우 : CSS 작성
