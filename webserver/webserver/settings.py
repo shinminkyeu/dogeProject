@@ -102,11 +102,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
-
 LANGUAGE_CODE = 'ko-kr'
 
 TIME_ZONE = 'Asia/Seoul'
@@ -117,7 +114,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -125,3 +121,12 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/picture/'
 MEDIA_ROOT = 'AMAZON_S3_SERVER/picture/'
+
+# S3 Storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# AWS Access
+AWS_ACCESS_KEY_ID = 'AKIAWPA7IQ6L4H3KHPED'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'dogeproject'

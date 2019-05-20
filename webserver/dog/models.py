@@ -19,7 +19,7 @@ class Dog(models.Model):
     # 개 등록 사진의 일련번호
     dog_picture_counter = models.PositiveSmallIntegerField(default = 0)
     # 개 대표 사진의 일련번호
-    dog_picture_represented = models.PositiveSmallIntegerField()
+    dog_picture_represented = models.PositiveSmallIntegerField(default = 0)
     # 개의 털길이(Enum)
     dog_coat_length = models.PositiveSmallIntegerField(null = True, blank = True)
     # 개의 털색깔(String)

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db import models
 from django.utils import timezone
 
@@ -12,3 +12,17 @@ class DogInput(models.Model):
     gender = models.BooleanField()
     # 생사 정보는 Contract에는 보내되 Input으로 받지는 않는다.
     alive = models.BooleanField(default=True)
+
+def show_img(request):
+    from .models import Picture, Dog
+    if request.method == 'POST':
+        img = request.FILES.get('img-file')
+        dog = Dog.objects.first()
+        Picture.objects.create(dog=dog ,picture_url=img)
+        return redirect(show_img)
+    else:
+        img = Picture.objects.first()
+    context = {
+        'object': img
+    }
+    return render(request, 'index.html', context)
