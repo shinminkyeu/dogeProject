@@ -18,6 +18,13 @@ Web
     - JavaScript:
     - CSS       :
 
+EC2 환경
+    - Python 3.7.3
+    - pip 19.1.1
+    - dJango 2.2.1
+    - web3 4.9.2
+    - Pillow 6.0.0
+
 
 일정
     1주차 (~5.17)       : 스마트 컨트랙트 개발(개, 거래)
