@@ -41,6 +41,7 @@
     : STATE state;
     : address owner;
     : address buyer;
+    : string region;
 
 함수
     private :
