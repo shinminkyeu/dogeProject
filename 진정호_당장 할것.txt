@@ -1,0 +1,1 @@
+진정호 : web3.py 적용 테스트, web쪽 form 모델 알려주기, 장고 formfield 알아보기, generic view 알아보기
