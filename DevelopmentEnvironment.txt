@@ -1,15 +1,13 @@
-
+인원 : 신민규, 진정호, 김영우
+    - 신민규 : 솔리디티 프로그래밍, 웹 서버, 전체 기획
+    - 진정호 : 웹 프로그래밍
+    - 김영우 : 웹 디자인.
 
 Block Chain (Ethereum)
     - solidity : >=0.4.0 <0.6.0
     - truffle
     - MetaMask
-    - Infura(
-        from web3 import Web3
-        w3 = Web3(Web3.HTTPProvider("https://ropsten.infura.io/v3/6de59f77f06e447a89d8fecdcbc9017d"))
 
-        이후 w3 객체를 사용 가능.
-    )
 Web
     - Framework : dJango
     - DB        : dJango
