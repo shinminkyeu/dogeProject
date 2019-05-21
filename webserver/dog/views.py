@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.db import models
 from django.utils import timezone
 
+from .models import Picture, Dog
+
 # Contract에 보낼 model.
 class DogInput(models.Model):
     # birth는 템플릿에서 Date로 받은 후 unixtime으로 변경해 Contract에 전송.
@@ -14,7 +16,6 @@ class DogInput(models.Model):
     alive = models.BooleanField(default=True)
 
 def show_img(request):
-    from .models import Picture, Dog
     if request.method == 'POST':
         img = request.FILES.get('img-file')
         dog = Dog.objects.first()

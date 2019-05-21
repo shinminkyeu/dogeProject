@@ -1,0 +1,39 @@
+{% load static %}
+
+<!-- j쿼리, abi 로드 구문 -->
+<script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+<script src = "{% static 'w3Conn/doge_abi.js' %}"></script>
+
+<div id = 'urid'> </div>
+
+<script>
+
+    async function userAccount() {
+        if (ethereum) { // 최신 메타마스크라면,
+            web3 = new Web3(ethereum);
+            try { // 권한 요청이 필요
+                await etherem.enable();
+                startApp();
+            } catch (err) {
+                // 권한 요청 거부시 코드
+            }
+        } else if (typeof web3 !== 'undefined') { // 구버전 메타마스크라면
+            web3 = new Web3(web3.currentProvider);
+            startApp(); // 권한 요청 없이 실행
+        } else {
+            // 메타마스크가 없으면 실행될 코드
+        }
+    }
+    // 컨트랙트 주소
+
+    addEventListener('load', userAccount())
+
+    // 앱 실행 함수
+    startApp = () => {
+        const contractAddress = "0x118726f5e9c1ef9969f78e3b4341b08f8f9a5219";
+        let 
+    }
+</script>

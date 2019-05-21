@@ -124,7 +124,7 @@ MEDIA_ROOT = 'AMAZON_S3_SERVER/picture/'
 
 # S3 Storage
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # AWS Access
 AWS_ACCESS_KEY_ID = 'AKIAWPA7IQ6L4H3KHPED'
