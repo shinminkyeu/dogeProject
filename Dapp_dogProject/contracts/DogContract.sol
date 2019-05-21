@@ -10,7 +10,7 @@ contract DogContract {
         string rfid;                           //동물보호관리시스템 RFID
     }
     event newDog(uint _dogId, address _owner);  //개가 등록돼면 발생
-    event registeredParent(string _message, uint _dogId, uint _pDogId);
+    event registeredParent(string _message, uint _dogId, uint _pDogId, address _owner);
     Dog[] dogs;
     mapping(uint => uint[2]) childToParent;     // 새끼개로 부모개 읽어오기, 0=>어미견, 1=부모견
     mapping(uint => uint[]) parentToChildren;   // 부모개로 새끼개 읽어오기
@@ -47,12 +47,12 @@ contract DogContract {
         if(childToParent[_dogId][0] == 0) {
             childToParent[_dogId][0] = _femaleId;
             parentToChildren[_femaleId].push(_dogId);
-            emit registeredParent("Mom Dog Registered!", _dogId, _femaleId);
+            emit registeredParent("Mom Dog Registered!", _dogId, _femaleId, msg.sender);
         }
         if(childToParent[_dogId][1] == 0) {
             childToParent[_dogId][1] = _maleId;
             parentToChildren[_maleId].push(_dogId);
-            emit registeredParent("Dad Dog Registered!", _dogId, _maleId);
+            emit registeredParent("Dad Dog Registered!", _dogId, _maleId, msg.sender);
         }
     }
     function findDog(uint _dogId) public view returns(uint32, uint8, bool, bool, string memory, string memory){
