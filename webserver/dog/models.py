@@ -18,7 +18,7 @@ class Dog(models.Model):
     dog_id = models.PositiveIntegerField(primary_key = True)
     # 개 등록 사진의 일련번호
     dog_picture_counter = models.PositiveSmallIntegerField(default = 0)
-    # 개 대표 사진의 일련번호
+    # 개 대표 사진의 일련번호 (0이면 대표사진이 없도록 해야 하나..?)
     dog_picture_represented = models.PositiveSmallIntegerField(default = 0)
     # 개의 털길이(Enum)
     dog_coat_length = models.PositiveSmallIntegerField(null = True, blank = True)
