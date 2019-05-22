@@ -4,7 +4,7 @@ import "./DogContract.sol";
 
 contract DogApp is DogContract {
     //부모견의 소유주에게 메시지를 보내기 위한 이벤트
-    event approveRegisterParent(uint _dogId, uint _pDogId, address _from, address _to);
+    event approveRegisterParent(uint dogId, uint pDogId, address from, address to);
 
     function registerDog(uint32 _birth, uint8 _kind, bool _gender, bool _alive, string memory _regiNo,
      string memory _rfid, uint _fatherId, uint _motherId ) public {
