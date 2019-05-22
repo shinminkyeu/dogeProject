@@ -71,6 +71,7 @@
     
     function reg_dog() {
         let birth = new Date($('#reg-birth').val()).getTime() / 1000
+        console.log($('#regNum').val() + "," + $('#rfid').val())
         contract.registerDog.sendTransaction(
             birth,
             $('#reg-breed').val(),
