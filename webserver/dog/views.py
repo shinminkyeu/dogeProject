@@ -18,7 +18,7 @@ class DogInput(models.Model):
 def show_img(request):
     if request.method == 'POST':
         img = request.FILES.get('img-file')
-        dog = Dog.objects.first()
+        dog = Dog.objects.get(dog_id=2)
         Picture.objects.create(dog=dog ,picture_url=img)
         return redirect(show_img)
     else:
