@@ -47,8 +47,13 @@
         contract = web3.eth.contract(doge_ABI).at(contractAddress)
         console.log(contract)
 
-        contract.newDog('data', e => {
-            find_dog(e.returnValues._dogId)
+        contract.newDog({
+            filter: {
+                _dogId: web3.eth.accounts[0]
+            }
+        }, (e,r) => {
+            console.log(e + ',' + r)
+            find_dog(r.returnValues._dogId)
         })
     }
 
@@ -71,7 +76,6 @@
     
     function reg_dog() {
         let birth = new Date($('#reg-birth').val()).getTime() / 1000
-        console.log(birth + ',' + Boolean(parseInt($('input[name="gender"]:checked').val())) + ',' + $('#regNum').val() + "," + $('#rfid').val())
         contract.registerDog.sendTransaction(
             birth,
             $('#reg-breed').val(),
