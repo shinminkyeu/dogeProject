@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from .models import Picture, Dog
 
+s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/dog_images/"
 # Contract에 보낼 model.
 class DogInput(models.Model):
     # birth는 템플릿에서 Date로 받은 후 unixtime으로 변경해 Contract에 전송.
@@ -22,9 +23,10 @@ def show_img(request):
         Picture.objects.create(dog=dog ,picture_url=img)
         return redirect(show_img)
     else:
-        img = Picture.objects.first().picture_url
-        print(img)
+        imgpath = Picture.objects.first().picture_url
+        imgurl = imgpath
     context = {
-        'object': img
+        'path'   : s3_dogImage_Path,
+        'picture': imgurl
     }
     return render(request, 'index.html', context)
