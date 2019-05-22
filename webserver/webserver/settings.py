@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+import json
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -124,10 +124,14 @@ MEDIA_ROOT = 'AMAZON_S3_SERVER/picture/'
 
 # S3 Storage
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # AWS Access
+ROOT_DIR = os.path.dirname(BASE_DIR)
+CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, 'webserver/.config_secret')
+CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+
 AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
 AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
 AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
