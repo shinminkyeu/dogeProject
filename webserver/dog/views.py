@@ -22,7 +22,8 @@ def show_img(request):
         Picture.objects.create(dog=dog ,picture_url=img)
         return redirect(show_img)
     else:
-        img = Picture.objects.first()
+        img = Picture.objects.first().picture_url
+        print(img)
     context = {
         'object': img
     }
