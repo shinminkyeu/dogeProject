@@ -29,6 +29,7 @@ contract DistributeContract is DogApp {
     //분양을 원하는 사람이 거래를 등록한다.
     //무슨 강아지를, 얼마에, 누가, 거래지역
     function resisterTrade(uint32 _dogId, uint8 _price, address _owner, string memory _region) public onlyDogOwner(_dogId) returns(uint)  {
+        require(dogs[_dogId].alive,"죽은 강아지는 분양할 수 없습니다.");
         uint id = trade.push(Trade(_dogId, _price, STATE.WAITTING, _owner, temp, _region))-1;
         return id;
     }
