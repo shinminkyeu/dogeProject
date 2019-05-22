@@ -6,34 +6,83 @@
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
 <script src = "{% static 'w3Conn/doge_abi.js' %}"></script>
-
-<div id = 'urid'> </div>
+<input type = 'number' id = 'find-by-id'>
+<button onclick = 'find_dog($("#find-by-id").val())'> id로 개 조회 </button>
+<div id = 'dog'> </div>
+<form>
+    <label for = 'reg-birth'>개 생일 : </label>
+    <input type = 'date' id = 'reg-birth'><br>
+    <label for = 'reg-breed'>개 품종 : </label>
+    <input type = 'number' id = 'reg-breed'><br>
+    개 성별 <br>
+    <input type = 'radio' id = 'male' name = 'gender' value = 0>
+    <label for = 'male'>수컷</label>
+    <input type = 'radio' id = 'female' name = 'gender' value = 1 checked = "checked">
+    <label for = 'female'>암컷</label> <br>
+    <label for = 'regNum'>동물등록번호</label>
+    <input type = 'text' id = 'regNum'><br>
+    <label for = 'rfid'>RFID</label>
+    <input type = 'text' id = 'rfid'><br>
+    <input type = 'button' value = '개 등록' onclick = 'reg_dog()'>
+</form>
 
 <script>
-
-    async function userAccount() {
+    var contract
+    // 컨트랙트 주소
+    const contractAddress = "0x118726f5e9c1ef9969f78e3b4341b08f8f9a5219";
+    async function bootApp() {
         if (ethereum) { // 최신 메타마스크라면,
-            web3 = new Web3(ethereum);
+            const web3 = new Web3(ethereum);
             try { // 권한 요청이 필요
-                await etherem.enable();
-                startApp();
+                await ethereum.enable();
             } catch (err) {
                 // 권한 요청 거부시 코드
             }
         } else if (typeof web3 !== 'undefined') { // 구버전 메타마스크라면
-            web3 = new Web3(web3.currentProvider);
-            startApp(); // 권한 요청 없이 실행
+            web3 = new Web3(web3.currentProvider); // 권한 요청 없이 실행
         } else {
             // 메타마스크가 없으면 실행될 코드
         }
-    }
-    // 컨트랙트 주소
+        // contract 객체 할당
+        contract = web3.eth.contract(doge_ABI).at(contractAddress)
+        console.log(contract)
 
-    addEventListener('load', userAccount())
-
-    // 앱 실행 함수
-    startApp = () => {
-        const contractAddress = "0x118726f5e9c1ef9969f78e3b4341b08f8f9a5219";
-        let 
+        contract.newDog('data', e => {
+            find_dog(e.returnValues._dogId)
+        })
     }
+
+    // 페이지가 로드 되면 사용자를 체크하고 컨트랙트 실행
+    addEventListener('load', bootApp())
+
+    function find_dog(id) {
+        contract.findDog.call(id,(err, res) => {
+            if (err) console.log(err)
+            let birth = new Date(res[0].toNumber() * 1000)
+            $('#dog').html('<ul>' +
+            '<li>개 생일 : ' + birth + '</li>' +
+            '<li>개 품종 : ' + res[1].toNumber() + '</li>' +
+            '<li>개 성별 : ' + (res[2]? '암컷' : '수컷') + '</li>' +
+            '<li>생존 여부 : ' + res[3].toString() + '</li>' +
+            '<li>등록 번호 : ' + res[4] + '</li>' +
+            '<li>RFID : ' + res[5] + '</li></ul>')
+        })
+    }
+    
+    function reg_dog() {
+        let birth = new Date($('#reg-birth').val()).getTime() / 1000
+        contract.registerDog.sendTransaction(
+            birth,
+            $('#reg-breed').val(),
+            Boolean($('[name="gender"]').val()),
+            true,
+            $('#regNum').val(),
+            $('#rfid').val(),
+            0, 0, (err, res) => {
+                if (err) console.log(err);
+                console.log(res)
+            }
+        )
+    }
+
 </script>
