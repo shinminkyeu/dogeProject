@@ -9,8 +9,8 @@ contract DogContract {
         string registrationNumber;            //동물보호관리시스템 등록번호
         string rfid;                           //동물보호관리시스템 RFID
     }
-    event newDog(uint _dogId, address _owner);  //개가 등록돼면 발생
-    event registeredParent(string _message, uint _dogId, uint _pDogId, address _owner);
+    event newDog(uint dogId, address owner);  //개가 등록돼면 발생
+    event registeredParent(string message, uint dogId, uint pDogId, address owner);
     Dog[] dogs;
     mapping(uint => uint[2]) childToParent;     // 새끼개로 부모개 읽어오기, 0=>어미견, 1=부모견
     mapping(uint => uint[]) parentToChildren;   // 부모개로 새끼개 읽어오기
