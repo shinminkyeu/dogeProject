@@ -127,6 +127,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # AWS Access
-AWS_ACCESS_KEY_ID = 'AKIAWPA7IQ6L4H3KHPED'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'dogeproject'
+config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
