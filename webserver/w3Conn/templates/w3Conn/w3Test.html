@@ -47,13 +47,9 @@
         contract = web3.eth.contract(doge_ABI).at(contractAddress)
         console.log(contract)
 
-        contract.newDog({
-            filter: {
-                _dogId: web3.eth.accounts[0]
-            }
-        }, (e,r) => {
-            console.log(e + ',' + r)
-            find_dog(r.returnValues._dogId)
+        contract.newDog({}, (err,res) => {
+            console.log(res)
+            find_dog(res.args._dogId.toNumber())
         })
     }
 
