@@ -73,4 +73,14 @@ contract DogApp is DogContract {
     function recoverAddr(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s)external pure  returns (address) {
         return ecrecover(msgHash, v, r, s);
     }
+    /*
+    function doHash(string memory message) public pure returns (bytes32) {
+	  return keccak256(keccak256("", message), "");
+	}
+
+    function checkSignature(string memory message, bytes32 r, bytes32 s, uint8 v)public pure returns (address) {
+	  var hash = doHash(message);
+    return ecrecover(hash, v, r, s);
+	}
+    //*/
 }
