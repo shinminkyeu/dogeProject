@@ -10,6 +10,7 @@
 <button onclick = 'find_dog($("#find-by-id").val())'> id로 개 조회 </button>
 <div id = 'dog'> </div>
 <form>
+    {% csrf_token %}
     <label for = 'reg-birth'>개 생일 : </label>
     <input type = 'date' id = 'reg-birth'><br>
     <label for = 'reg-breed'>개 품종 : </label>
@@ -25,11 +26,23 @@
     <input type = 'text' id = 'rfid'><br>
     <input type = 'button' value = '개 등록' onclick = 'reg_dog()'>
 </form>
-
+<button onclick = 'signMsg()'> 내 주소로 사인하기 </button>
+<form name = 'signData' method = 'POST'>
+    {% csrf_token %}
+    <input type = 'hidden' id = 'sigRes'>
+    <input type = 'hidden' id = 'msgParam'>
+    <input type = 'hidden' id = 'from'>
+</form>
 <script>
     let contract
     // 컨트랙트 주소
-    const contractAddress = "0x14bbad5d1121dc165a20143fed3c2429dbf659eb";
+    const contractAddress = "0xd3a1e343f537aa7cf26042c3b09852c139a0d1d4";
+    const sigParams = [
+    {
+        type: 'string',
+        name: 'message',
+        value: contractAddress
+    }]
     async function bootApp() {
         if (ethereum) { // 최신 메타마스크라면,
             const web3 = new Web3(ethereum);
@@ -85,4 +98,21 @@
         );
     }
 
+    function signMsg() {
+        let from = web3.eth.accounts[0];
+        $('#msgParam').val(contractAddress);
+        $('#from').val(from);
+        web3.currentProvider.sendAsync({
+            method: 'eth_signTypedData',
+            params: [sigParams, from],
+            from: from,
+        }, function (err, res) {
+            if (err) return console.error(err)
+            if (res.error) {
+            return console.error(res.error.message)
+            }
+            $('#sigRes').val(res.result);
+            document.signData.submit();
+        })
+    }
 </script>

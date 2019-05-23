@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views import generic
 
-from .infura import web3
+from .infura import contract
 from dog.models import *
 from user.models import *
 # Create your views here.
 def index(request):
     if request.method == 'POST':
-        return redirect(request)
+        sigRes = request.POST['sigRes']
+        
     else:
         context = {
 
