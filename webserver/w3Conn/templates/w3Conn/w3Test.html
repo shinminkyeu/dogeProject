@@ -29,7 +29,7 @@
 <script>
     let contract
     // 컨트랙트 주소
-    const contractAddress = "0xbe329449f1114c9849a7f60e13babf98d3fd7db1";
+    const contractAddress = "0x14bbad5d1121dc165a20143fed3c2429dbf659eb";
     async function bootApp() {
         if (ethereum) { // 최신 메타마스크라면,
             const web3 = new Web3(ethereum);
@@ -44,10 +44,7 @@
             // 메타마스크가 없으면 실행될 코드
         }
         // contract 객체 할당
-        contract = web3.eth.contract(doge_ABI).at(contractAddress)
-        console.log(contract)
-
-
+        contract = web3.eth.contract(doge_ABI).at(contractAddress);
     }
 
     // 페이지가 로드 되면 사용자를 체크하고 컨트랙트 실행
@@ -68,11 +65,11 @@
     }
     
     function reg_dog() {
-        let birth = new Date($('#reg-birth').val()).getTime() / 1000
+        let birth = (new Date($('#reg-birth').val()).getTime() / 1000) - (3600 * 9)
         contract.registerDog.sendTransaction(
             birth,
             $('#reg-breed').val(),
-            Boolean($('[name="gender"]').val()),
+            Boolean(parseInt($('[name="gender"]').val())),
             true,
             $('#regNum').val(),
             $('#rfid').val(),
