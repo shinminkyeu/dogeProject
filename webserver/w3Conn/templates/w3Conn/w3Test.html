@@ -80,10 +80,12 @@
                 if (err) console.log(err);
                 contract.newDog({}, (err2, eve) => {
                     if (err2) console.log(err2);
-                    find_dog(eve.args.dogId.toNumber())
+                    if (eve.args.owner === web3.eth.accounts[0]) {
+                        find_dog(eve.args.dogId.toNumber())
+                    }
                 });
             }
-        )
+        );
     }
 
 </script>
