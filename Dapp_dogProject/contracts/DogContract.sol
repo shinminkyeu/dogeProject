@@ -27,6 +27,10 @@ contract DogContract {
         require(msg.sender == _currentDogOwner(_dogId), "You are not owner of this dog");
         _;
     }
+    function setDogs() public onlyProjectOwner(){
+        require(dogs.length == 0, "dogs가 비어있을때만 사용할수 있는 함수입니다.");
+        _newDog(0, 0, false, false, "", "");
+    }
     function changeKindCount(uint8 _value) public onlyProjectOwner(){
         kindCount = _value;
     }
