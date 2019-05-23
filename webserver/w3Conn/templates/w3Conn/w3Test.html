@@ -29,7 +29,7 @@
 <script>
     var contract
     // 컨트랙트 주소
-    const contractAddress = "0x118726f5e9c1ef9969f78e3b4341b08f8f9a5219";
+    const contractAddress = "0xbe329449f1114c9849a7f60e13babf98d3fd7db1";
     async function bootApp() {
         if (ethereum) { // 최신 메타마스크라면,
             const web3 = new Web3(ethereum);
@@ -47,8 +47,13 @@
         contract = web3.eth.contract(doge_ABI).at(contractAddress)
         console.log(contract)
 
-        contract.newDog('data', e => {
-            find_dog(e.returnValues._dogId)
+        contract.newDog({
+            filter: {
+                owner: web3.eth.accounts[0] 
+            }
+        }, (err,eve) => {
+            console.log(eve)
+            find_dog(eve.args._dogId.toNumber())
         })
     }
 
