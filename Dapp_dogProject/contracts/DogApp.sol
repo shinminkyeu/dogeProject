@@ -66,4 +66,11 @@ contract DogApp is DogContract {
     function addRFID(uint _dogId, string memory _rfid) public onlyDogOwner(_dogId){
         dogs[_dogId].rfid = _rfid;
     }
+
+    function isSigned(address _addr, bytes32 msgHash, uint8 v, bytes32 r, bytes32 s)external pure returns (bool) {
+        return ecrecover(msgHash, v, r, s) == _addr;
+    }
+    function recoverAddr(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s)external pure  returns (address) {
+        return ecrecover(msgHash, v, r, s);
+    }
 }
