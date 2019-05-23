@@ -8,7 +8,7 @@ from user.models import *
 def index(request):
     if request.method == 'POST':
         sigRes = request.POST['sigRes']
-        
+        contract.functions.checkSignature().call()
     else:
         context = {
 
