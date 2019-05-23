@@ -27,6 +27,7 @@
     <input type = 'button' value = '개 등록' onclick = 'reg_dog()'>
 </form>
 <button onclick = 'signMsg()'> 내 주소로 사인하기 </button>
+<div>{{ address }}<div>
 <form name = 'signData' method = 'POST'>
     {% csrf_token %}
     <input type = 'hidden' id = 'sigRes'>
