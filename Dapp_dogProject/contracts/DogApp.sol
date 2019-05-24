@@ -74,8 +74,10 @@ contract DogApp is DogContract {
         return ecrecover(msgHash, v, r, s);
     }
     function doHash(bytes memory message) public pure returns (bytes32) {
+        bytes memory strdd = 'string message';
+        bytes memory _str = abi.encodePacked(keccak256(strdd));
         bytes memory _message = abi.encodePacked(keccak256(message));
-	    return keccak256(_message);
+	    return keccak256(abi.encodePacked(_str, _message));
 	}
     function checkSignature(bytes memory message, bytes32 r, bytes32 s, uint8 v)public pure returns (address) {
         bytes32 hash = doHash(message);
