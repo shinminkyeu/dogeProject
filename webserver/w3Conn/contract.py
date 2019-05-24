@@ -8,3 +8,11 @@ web3 = Web3(Web3.WebsocketProvider("wss://ropsten.infura.io/ws/v3/6de59f77f06e44
 contract = web3.eth.contract(address = Web3.toChecksumAddress(contractAddress), abi = contract_abi)
 signData = bytes('지갑을 인증해 주세요.\nPlease verify your wallet.', encoding = 'utf-8')
 
+def checkSign(signTypedData: str, address: str) -> bool:
+    sign = contract.functions.checkSignature(
+            signData,
+            bytes.fromhex(signTypedData[2:66]),
+            bytes.fromhex(signTypedData[66:130]),
+            int(signTypedData[130:], 16)
+        ).call()
+    return sign == Web3.toChecksumAddress(address)
