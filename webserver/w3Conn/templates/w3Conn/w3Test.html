@@ -10,6 +10,7 @@
 <button onclick = 'find_dog($("#find-by-id").val())'> id로 개 조회 </button>
 <div id = 'dog'> </div>
 <form>
+    {% csrf_token %}
     <label for = 'reg-birth'>개 생일 : </label>
     <input type = 'date' id = 'reg-birth'><br>
     <label for = 'reg-breed'>개 품종 : </label>
@@ -25,11 +26,24 @@
     <input type = 'text' id = 'rfid'><br>
     <input type = 'button' value = '개 등록' onclick = 'reg_dog()'>
 </form>
-
+<button onclick = 'signMsg()'> 내 주소로 사인하기 </button>
+<div>{{ address }}<div>
+<form name = 'signData' method = 'POST'>
+    {% csrf_token %}
+    <input type = 'hidden' id = 'sigRes'>
+    <input type = 'hidden' id = 'msgParam'>
+    <input type = 'hidden' id = 'from'>
+</form>
 <script>
-    var contract
+    let contract
     // 컨트랙트 주소
-    const contractAddress = "0xbe329449f1114c9849a7f60e13babf98d3fd7db1";
+    const contractAddress = "0xfd220453e84762842bae8f1ed64e50dcf2141d7d";
+    const sigParams = [
+    {
+        type: 'string',
+        name: 'message',
+        value: contractAddress
+    }]
     async function bootApp() {
         if (ethereum) { // 최신 메타마스크라면,
             const web3 = new Web3(ethereum);
@@ -44,17 +58,7 @@
             // 메타마스크가 없으면 실행될 코드
         }
         // contract 객체 할당
-        contract = web3.eth.contract(doge_ABI).at(contractAddress)
-        console.log(contract)
-
-        contract.newDog({
-            filter: {
-                owner: web3.eth.accounts[0] 
-            }
-        }, (err,eve) => {
-            console.log(eve)
-            find_dog(eve.args._dogId.toNumber())
-        })
+        contract = web3.eth.contract(doge_ABI).at(contractAddress);
     }
 
     // 페이지가 로드 되면 사용자를 체크하고 컨트랙트 실행
@@ -75,19 +79,41 @@
     }
     
     function reg_dog() {
-        let birth = new Date($('#reg-birth').val()).getTime() / 1000
+        let birth = (new Date($('#reg-birth').val()).getTime() / 1000) - (3600 * 9)
         contract.registerDog.sendTransaction(
             birth,
             $('#reg-breed').val(),
-            Boolean($('[name="gender"]').val()),
+            Boolean(parseInt($('[name="gender"]').val())),
             true,
             $('#regNum').val(),
             $('#rfid').val(),
             0, 0, (err, res) => {
                 if (err) console.log(err);
-                console.log(res)
+                contract.newDog({}, (err2, eve) => {
+                    if (err2) console.log(err2);
+                    if (eve.args.owner === web3.eth.accounts[0]) {
+                        find_dog(eve.args.dogId.toNumber())
+                    }
+                });
             }
-        )
+        );
     }
 
+    function signMsg() {
+        let from = web3.eth.accounts[0];
+        $('#msgParam').val(contractAddress);
+        $('#from').val(from);
+        web3.currentProvider.sendAsync({
+            method: 'eth_signTypedData',
+            params: [sigParams, from],
+            from: from,
+        }, function (err, res) {
+            if (err) return console.error(err)
+            if (res.error) {
+            return console.error(res.error.message)
+            }
+            $('#sigRes').val(res.result);
+            document.signData.submit();
+        })
+    }
 </script>
