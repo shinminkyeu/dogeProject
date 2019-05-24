@@ -1,1 +1,4 @@
-진정호 : web3.py 적용 테스트, 장고 formfield 알아보기, generic view 알아보기
+web3.py 적용 테스트, 장고 formfield 알아보기, generic view 알아보기
+
+진행 : web3.py 컨트랙트 연동 성공
+웹소켓 적용 실패

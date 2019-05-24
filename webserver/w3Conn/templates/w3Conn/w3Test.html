@@ -30,9 +30,9 @@
 <div>{{ address }}<div>
 <form name = 'signData' method = 'POST'>
     {% csrf_token %}
-    <input type = 'hidden' id = 'sigRes'>
-    <input type = 'hidden' id = 'msgParam'>
-    <input type = 'hidden' id = 'from'>
+    <input type = 'hidden' name = 'sigRes'>
+    <input type = 'hidden' name = 'from'>
+    <input type = 'hidden' name = 'data'>
 </form>
 <script>
     let contract
@@ -101,18 +101,16 @@
 
     function signMsg() {
         let from = web3.eth.accounts[0];
-        $('#msgParam').val(contractAddress);
-        $('#from').val(from);
+        $('input[name=from]').val(from);
+        $('input[name=data]').val(JSON.stringify(sigParams))
         web3.currentProvider.sendAsync({
             method: 'eth_signTypedData',
             params: [sigParams, from],
             from: from,
         }, function (err, res) {
             if (err) return console.error(err)
-            if (res.error) {
-            return console.error(res.error.message)
-            }
-            $('#sigRes').val(res.result);
+            console.log(res.result);
+            $('input[name=sigRes]').val(res.result);
             document.signData.submit();
         })
     }
