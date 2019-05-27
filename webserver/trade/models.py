@@ -14,6 +14,10 @@ def img_name_policy(instance, filename):
 class Trade(models.Model):
     # Contract에서 받아올 거래 ID
     trade_id = models.PositiveIntegerField(primary_key = True)
+    # 분양글 제목
+    trade_title = models.CharField(max_length = 200)
+    # 분양글 가격
+    trade_value = models.PositiveIntegerField(default = 0)
     # 분양글 본문 (기본값 수정 중)
     trade_text = models.TextField()
     # 분양 이미지의 일련번호
