@@ -1,5 +1,6 @@
 from web3 import Web3
 import json
+import sys
 
 contractAddress = "0xfd220453e84762842bae8f1ed64e50dcf2141d7d"
 with open('abi.json', 'r') as f:
@@ -16,3 +17,13 @@ def checkSign(signTypedData: str, address: str) -> bool:
             int(signTypedData[130:], 16)
         ).call()
     return sign == Web3.toChecksumAddress(address)
+
+# def watingTradeList(
+# ageStart = 0: int,
+# ageEnd = sys.maxint: int,
+# gender = true: bool,
+# breed = -1: int,
+# size = -1: int,
+# color = '': str,
+# 
+# )
