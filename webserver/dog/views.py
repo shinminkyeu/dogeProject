@@ -30,3 +30,9 @@ def show_img(request):
         'picture': imgurl
     }
     return render(request, 'index.html', context)
+
+def register(request) :
+    if request.method == 'POST':
+        pass
+    else :
+        return render(request, 'regi.html')
