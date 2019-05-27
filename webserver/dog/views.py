@@ -42,6 +42,7 @@ def register(request) :
             'breedList'  : getBreed()
         }
         return render(request, 'dog/regi.html', context)
+
 def getBreed(_size=10):
     rVal = []
     breeds = Breed.objects.all()
