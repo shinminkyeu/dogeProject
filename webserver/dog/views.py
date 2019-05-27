@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.utils import timezone
-
 from .models import Picture, Dog
 
 s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/dog_images/"
@@ -29,10 +28,10 @@ def show_img(request):
         'path'   : s3_dogImage_Path,
         'picture': imgurl
     }
-    return render(request, 'index.html', context)
+    return render(request, 'dogs/index.html', context)
 
 def register(request) :
     if request.method == 'POST':
         pass
     else :
-        return render(request, 'regi.html')
+        return render(request, './dogs/regi.html')
