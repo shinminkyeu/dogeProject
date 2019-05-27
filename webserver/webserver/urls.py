@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('dog/', include('dog.urls')),
     # path('user/', include('user.urls')),
-    path('', include('w3Conn.urls'))
+    path('', include('trade.urls'))
 ]
