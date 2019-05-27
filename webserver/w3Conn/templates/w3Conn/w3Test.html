@@ -1,0 +1,117 @@
+{% load static %}
+
+<!-- j쿼리, abi 로드 구문 -->
+<script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+<script src = "{% static 'resources/w3Conn/doge_abi.js' %}"></script>
+<input type = 'number' id = 'find-by-id'>
+<button onclick = 'find_dog($("#find-by-id").val())'> id로 개 조회 </button>
+<div id = 'dog'> </div>
+<form>
+    {% csrf_token %}
+    <label for = 'reg-birth'>개 생일 : </label>
+    <input type = 'date' id = 'reg-birth'><br>
+    <label for = 'reg-breed'>개 품종 : </label>
+    <input type = 'number' id = 'reg-breed'><br>
+    개 성별 <br>
+    <input type = 'radio' id = 'male' name = 'gender' value = 0>
+    <label for = 'male'>수컷</label>
+    <input type = 'radio' id = 'female' name = 'gender' value = 1 checked = "checked">
+    <label for = 'female'>암컷</label> <br>
+    <label for = 'regNum'>동물등록번호</label>
+    <input type = 'text' id = 'regNum'><br>
+    <label for = 'rfid'>RFID</label>
+    <input type = 'text' id = 'rfid'><br>
+    <input type = 'button' value = '개 등록' onclick = 'reg_dog()'>
+</form>
+<button onclick = 'signMsg()'> 내 주소로 사인하기 </button>
+<div>{{ address }}<div>
+<form name = 'signData' method = 'POST'>
+    {% csrf_token %}
+    <input type = 'hidden' name = 'sigRes'>
+    <input type = 'hidden' name = 'from'>
+    <input type = 'hidden' name = 'data'>
+</form>
+<script>
+    let contract
+    // 컨트랙트 주소
+    const contractAddress = "0xfd220453e84762842bae8f1ed64e50dcf2141d7d";
+    const sigParams = [
+    {
+        type: 'string',
+        name: 'message',
+        value: '지갑을 인증해 주세요.\nPlease verify your wallet.'
+    }]
+    async function bootApp() {
+        if (ethereum) { // 최신 메타마스크라면,
+            const web3 = new Web3(ethereum);
+            try { // 권한 요청이 필요
+                await ethereum.enable();
+            } catch (err) {
+                // 권한 요청 거부시 코드
+            }
+        } else if (typeof web3 !== 'undefined') { // 구버전 메타마스크라면
+            web3 = new Web3(web3.currentProvider); // 권한 요청 없이 실행
+        } else {
+            // 메타마스크가 없으면 실행될 코드
+        }
+        // contract 객체 할당
+        contract = web3.eth.contract(doge_ABI).at(contractAddress);
+    }
+
+    // 페이지가 로드 되면 사용자를 체크하고 컨트랙트 실행
+    addEventListener('load', bootApp())
+
+    function find_dog(id) {
+        contract.findDog.call(id,(err, res) => {
+            if (err) console.log(err)
+            let birth = new Date(res[0].toNumber() * 1000)
+            $('#dog').html('<ul>' +
+            '<li>개 생일 : ' + birth + '</li>' +
+            '<li>개 품종 : ' + res[1].toNumber() + '</li>' +
+            '<li>개 성별 : ' + (res[2]? '암컷' : '수컷') + '</li>' +
+            '<li>생존 여부 : ' + res[3].toString() + '</li>' +
+            '<li>등록 번호 : ' + res[4] + '</li>' +
+            '<li>RFID : ' + res[5] + '</li></ul>')
+        })
+    }
+    
+    function reg_dog() {
+        let birth = (new Date($('#reg-birth').val()).getTime() / 1000) - (3600 * 9)
+        contract.registerDog.sendTransaction(
+            birth,
+            $('#reg-breed').val(),
+            Boolean(parseInt($('[name="gender"]').val())),
+            true,
+            $('#regNum').val(),
+            $('#rfid').val(),
+            0, 0, (err, res) => {
+                if (err) console.log(err);
+                contract.newDog({}, (err2, eve) => {
+                    if (err2) console.log(err2);
+                    if (eve.args.owner === web3.eth.accounts[0]) {
+                        find_dog(eve.args.dogId.toNumber())
+                    }
+                });
+            }
+        );
+    }
+
+    function signMsg() {
+        let from = web3.eth.accounts[0];
+        $('input[name=from]').val(from);
+        $('input[name=data]').val(JSON.stringify(sigParams))
+        web3.currentProvider.sendAsync({
+            method: 'eth_signTypedData',
+            params: [sigParams, from],
+            from: from,
+        }, function (err, res) {
+            if (err) return console.error(err)
+            console.log(res.result);
+            $('input[name=sigRes]').val(res.result);
+            document.signData.submit();
+        })
+    }
+</script>

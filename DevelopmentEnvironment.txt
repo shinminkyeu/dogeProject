@@ -9,16 +9,25 @@ Block Chain (Ethereum)
     - MetaMask
 
 Web
-    - Framework : dJango
-    - DB        : dJango
-    - Connect   : Web3.py
-    - EC2(linux): 웹서버 배포
-    - S3        : 사진저장
-    - HTML      :
-    - JavaScript:
-    - CSS       :
+    - Framework         : dJango
+    - DB                : dJango
+    - Connect           : Web3.py
+    - EC2(linux)        : 웹서버 배포
+    - S3                : 사진저장
+    - boto3             : python => S3 연결 API  (pip install boto3)
+    - django_storages   : django프레임 워크 스토리지 (pip install django_storages)
+    - HTML              :
+    - JavaScript        :
+    - CSS               :
 
-
+EC2 환경
+    - Python 3.7.3
+    - pip 19.1.1
+    - dJango 2.2.1
+    - web3 4.9.2
+    - Pillow 6.0.0
+    - boto3 1.9.153
+    - django_storages 1.7.1
 일정
     1주차 (~5.17)       : 스마트 컨트랙트 개발(개, 거래)
     2주차 (5.20 ~ 5.25) : Web 개발 (Back-End, Frond-End)

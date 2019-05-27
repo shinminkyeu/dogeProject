@@ -4,16 +4,17 @@ import "./DogContract.sol";
 
 contract DogApp is DogContract {
     //부모견의 소유주에게 메시지를 보내기 위한 이벤트
-    event approveRegisterParent(uint _dogId, uint _pDogId, address _from, address _to);
+    event approveRegisterParent(uint dogId, uint pDogId, address indexed from, address indexed to);
 
     function registerDog(uint32 _birth, uint8 _kind, bool _gender, bool _alive, string memory _regiNo,
      string memory _rfid, uint _fatherId, uint _motherId ) public {
+        require(_birth < now, "아직 태어나지 않은 개 입니다.");
         //_fatherId 또는 _motherId 는 내용이 없다면 0이다.
-        uint age = now - _birth;
+        uint age = now -_birth;
         uint momId = _motherId;
         uint dadId = _fatherId;
-        require(dogs[dadId].birth > _birth, "아빠견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
-        require(dogs[momId].birth > _birth, "엄마견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
+        require(dogs[dadId].birth < _birth, "아빠견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
+        require(dogs[momId].birth < _birth, "엄마견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
         if(age < ageRestriction) {      //성견인지 아닌지 확인(6개월.)
             require(_motherId != 0, "Register it's mother dog");     //나이가 어리다면, 부모에 대한 id값이 있는지 확인하고 없다면 error를 발생시킨다.
             require(dogs[momId].gender, "It's not female");          //입력된 어미견의 성별이 암컷이 아니라면.
@@ -65,4 +66,21 @@ contract DogApp is DogContract {
     function addRFID(uint _dogId, string memory _rfid) public onlyDogOwner(_dogId){
         dogs[_dogId].rfid = _rfid;
     }
+
+    function isSigned(address _addr, bytes32 msgHash, uint8 v, bytes32 r, bytes32 s)external pure returns (bool) {
+        return ecrecover(msgHash, v, r, s) == _addr;
+    }
+    function recoverAddr(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s)external pure  returns (address) {
+        return ecrecover(msgHash, v, r, s);
+    }
+    function doHash(bytes memory message) public pure returns (bytes32) {
+        bytes memory strdd = 'string message';
+        bytes memory _str = abi.encodePacked(keccak256(strdd));
+        bytes memory _message = abi.encodePacked(keccak256(message));
+	    return keccak256(abi.encodePacked(_str, _message));
+	}
+    function checkSignature(bytes memory message, bytes32 r, bytes32 s, uint8 v)public pure returns (address) {
+        bytes32 hash = doHash(message);
+        return ecrecover(hash, v, r, s);
+	}
 }

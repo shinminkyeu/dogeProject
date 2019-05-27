@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db import models
 from django.utils import timezone
 
+from .models import Picture, Dog
+
+s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/dog_images/"
 # Contract에 보낼 model.
 class DogInput(models.Model):
     # birth는 템플릿에서 Date로 받은 후 unixtime으로 변경해 Contract에 전송.
@@ -12,3 +15,18 @@ class DogInput(models.Model):
     gender = models.BooleanField()
     # 생사 정보는 Contract에는 보내되 Input으로 받지는 않는다.
     alive = models.BooleanField(default=True)
+
+def show_img(request):
+    if request.method == 'POST':
+        img = request.FILES.get('img-file')
+        dog = Dog.objects.get(dog_id=2)
+        Picture.objects.create(dog=dog ,picture_url=img)
+        return redirect(show_img)
+    else:
+        imgpath = Picture.objects.first().picture_url
+        imgurl = imgpath
+    context = {
+        'path'   : s3_dogImage_Path,
+        'picture': imgurl
+    }
+    return render(request, 'index.html', context)
