@@ -25,3 +25,7 @@ class TradeImage(models.Model):
     trade = models.ForeignKey(Trade, on_delete = models.CASCADE)
     # 이미지의 url
     img_url = models.ImageField(upload_to = img_name_policy)
+
+class RegionTable(models.Model):
+    stepOne = models.CharField(max_length = 10)
+    stepTwo = models.CharField(max_length = 10)
