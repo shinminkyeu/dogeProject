@@ -10,7 +10,7 @@ contract DogApp is DogContract {
      string memory _rfid, uint _fatherId, uint _motherId ) public {
         require(_birth < now, "아직 태어나지 않은 개 입니다.");
         //_fatherId 또는 _motherId 는 내용이 없다면 0이다.
-        uint age = now -_birth;
+        uint age = now - _birth;
         uint momId = _motherId;
         uint dadId = _fatherId;
         require(dogs[dadId].birth < _birth, "아빠견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
