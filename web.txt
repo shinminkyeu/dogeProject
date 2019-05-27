@@ -1,4 +1,4 @@
-개 등록시 form 속성 :
+﻿개 등록시 form 속성 :
     - 강아지 생일 : Date
     - 강아지 품종 : Select
     - 강아지 성별 : Select
