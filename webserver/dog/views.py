@@ -32,13 +32,16 @@ def show_img(request):
 
 def register(request) :
     if request.method == 'POST':
-        pass
+        dog = Dog.objects.create(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
+        images = request.POST.get("dogImages")
+        for each in images:
+            Picture.objects.create(dog=dog ,picture_url=each)
+        return redirect(register)
     else :
         context = {
             'breedList'  : getBreed()
         }
         return render(request, 'dog/regi.html', context)
-
 def getBreed(_size=10):
     rVal = []
     breeds = Breed.objects.all()
