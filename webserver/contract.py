@@ -24,6 +24,4 @@ def checkSign(signTypedData: str, address: str) -> bool:
 # gender = true: bool,
 # breed = -1: int,
 # size = -1: int,
-# color = '': str,
-# 
 # )
