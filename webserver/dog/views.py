@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.utils import timezone
-
-from .models import Picture, Dog
-
+from .models import Picture, Dog, Breed
+from .templates import *
 s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/dog_images/"
 # Contract에 보낼 model.
 class DogInput(models.Model):
@@ -29,4 +28,30 @@ def show_img(request):
         'path'   : s3_dogImage_Path,
         'picture': imgurl
     }
-    return render(request, 'index.html', context)
+    return render(request, 'dogs/index.html', context)
+
+def register(request) :
+    if request.method == 'POST':
+        pass
+    else :
+        context = {
+            'breedList'  : getBreed()
+        }
+        return render(request, 'dog/regi.html', context)
+
+def getBreed(_size=10):
+    rVal = []
+    breeds = Breed.objects.all()
+    for each in breeds:  #0:소형견, 1:중형견, 2:대형견
+        if _size == 0:
+            if each.breed_size == 0:
+                rVal.append([each.id, each.breed_kind, each.breed_size])
+        elif _size == 1:
+            if each.breed_size == 1:
+                rVal.append([each.id, each.breed_kind, each.breed_size])
+        elif _size == 2:
+            if each.breed_size == 2:
+                rVal.append([each.id, each.breed_kind, each.breed_size])
+        else:
+            rVal.append([each.id, each.breed_kind, each.breed_size])
+    return rVal
