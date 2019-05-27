@@ -16,21 +16,33 @@ contract DistributeContract is DogApp {
     mapping(uint => uint[]) dogTrade;       //강아지 id => 거래 id : 강아지가 어느 거래에 포함되었는지
     mapping(address => uint[]) ownerTrade;  //분양자 id => 거래 id : 분양자가 어느 거래에 포함되었는지
     mapping(address => uint[]) buyerTrade;  //구매자 id => 거래 id : 구매자가 어느 거래에 포함되었는지
+    uint wattingCount = 0;
     address payable temp;                           //가짜 주소.
     modifier onlyTradeOwner(uint _tradeid) {
         require(trade[_tradeid].owner == msg.sender, "You are not owner of this trade");
         _;
     }
-    function showTrade(uint _tradeId) public view returns(uint32, uint8, STATE, address, address, string memory) {
+    function showTrade(uint _tradeId) public view returns(uint32, uint8, STATE, address payable, address payable, string memory) {
         return(trade[_tradeId].dogId, trade[_tradeId].price, trade[_tradeId].state,trade[_tradeId].owner,
          trade[_tradeId].buyer, trade[_tradeId].region);
     }
-
+    function showWattingTrade() external view returns(uint[] memory){
+        uint[] memory rVal = new uint[](wattingCount);
+        uint rIndex = 0;
+        for(uint i = 0 ; i < trade.length ; i++) {
+            if(trade[i].state == STATE.WAITTING) {
+                rVal[rIndex] = i;
+                rIndex++;
+            }
+        }
+        return rVal;
+    }
     //분양을 원하는 사람이 거래를 등록한다.
     //무슨 강아지를, 얼마에, 누가, 거래지역
     function resisterTrade(uint32 _dogId, uint8 _price, string memory _region) public onlyDogOwner(_dogId) returns(uint)  {
         require(dogs[_dogId].alive,"죽은 강아지는 분양할 수 없습니다.");
         uint id = trade.push(Trade(_dogId, _price, STATE.WAITTING, msg.sender, temp, _region))-1;
+        wattingCount++;
         return id;
     }
     //분양을 희망하는 사람이 거래를 예약한다.
@@ -39,6 +51,7 @@ contract DistributeContract is DogApp {
     function reserveTrade(uint _tradeId, address payable _buyer) public {
         require(trade[_tradeId].state == STATE.WAITTING, "분양중인 상태가 아닙니다.");     //대기 상태인 거래만 구매자를 받을 수 있다.
         require(_buyer.balance >= trade[_tradeId].price, "상대방의 잔액이 부족합니다.");
+        wattingCount--;
         trade[_tradeId].state = STATE.READY;
         trade[_tradeId].buyer = _buyer;
     }
@@ -52,6 +65,7 @@ contract DistributeContract is DogApp {
     function cancleTrade(uint _tradeId) public {
         require(trade[_tradeId].state == STATE.READY, "예약상태가 아닙니다.");
         trade[_tradeId].state = STATE.WAITTING;
+        wattingCount++;
         trade[_tradeId].buyer = temp;
     }
 }
