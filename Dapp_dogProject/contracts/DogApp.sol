@@ -67,12 +67,6 @@ contract DogApp is DogContract {
         dogs[_dogId].rfid = _rfid;
     }
 
-    function isSigned(address _addr, bytes32 msgHash, uint8 v, bytes32 r, bytes32 s)external pure returns (bool) {
-        return ecrecover(msgHash, v, r, s) == _addr;
-    }
-    function recoverAddr(bytes32 msgHash, uint8 v, bytes32 r, bytes32 s)external pure  returns (address) {
-        return ecrecover(msgHash, v, r, s);
-    }
     function doHash(bytes memory message) public pure returns (bytes32) {
         bytes memory strdd = 'string message';
         bytes memory _str = abi.encodePacked(keccak256(strdd));
