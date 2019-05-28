@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div id = 'search'>
+    </div>
+    <ul>
+        {% for trade in waiting_list %}
+        <li>{{ trade }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

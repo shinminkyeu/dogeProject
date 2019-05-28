@@ -28,6 +28,13 @@ EC2 환경
     - Pillow 6.0.0
     - boto3 1.9.153
     - django_storages 1.7.1
+
+페이지 환경
+    - bootstrap 4.3.1
+    - jQuery 3.4.0
+    - w3.css 4.12
+    - metamask 6.5.3
+
 일정
     1주차 (~5.17)       : 스마트 컨트랙트 개발(개, 거래)
     2주차 (5.20 ~ 5.25) : Web 개발 (Back-End, Frond-End)
