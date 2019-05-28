@@ -3,7 +3,9 @@ from django.db import models
 from django.utils import timezone
 from .models import Picture, Dog, Breed
 from .templates import *
+from contract import *
 s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/dog_images/"
+
 # Contract에 보낼 model.
 class DogInput(models.Model):
     # birth는 템플릿에서 Date로 받은 후 unixtime으로 변경해 Contract에 전송.
@@ -46,7 +48,9 @@ def register(request) :
         return render(request, 'dog/regi.html', context)
 
 def findMyDog():
-    pass
+    mypets = contract.functions.showOwnerToDog(web3.accounts[0]).call()
+    mydogs = Dog.objects.get(dog_id = x:for x in mypets)
+
 
 def getBreed(_size=10):
     rVal = []
