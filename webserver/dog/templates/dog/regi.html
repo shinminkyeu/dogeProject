@@ -14,6 +14,7 @@
 	<style>
 	</style>
 </head>
+
 <body>
 	<!-- Navbar (fixed on top) 내비게이션 바 (위쪽에 고정) -->
 	<div class="w3-top">
@@ -35,11 +36,11 @@
 	<!-- Register a dog Section (강아지 등록) -->
 	<div class="w3-container w3-padding-32" id="Register">
 		<h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"> Register a dog </h3><br>
-		
-		<form action="/dog/register/" method="POST">{% csrf_token %}
+
+		<form action="/dog/register/" method="POST" id="form1" enctype="multipart/form-data">{% csrf_token %}
 			<input type="hidden" name="dogId" id="dogId" value="">
 			Name<input class="w3-input w3-border" id="dogName" name="dogName" type="text"></p>
-			Birthday<br><input style="width:100%;height:40px;"type="date" name="dogBirth" id="dogBirth">
+			Birthday<br><input style="width:100%;height:40px;" type="date" name="dogBirth" id="dogBirth">
 			<br><br>
 			<!--부모견 정보 입력-->
 			<select class="w3-select" style="height:40px;" name="dogDad" id="dogDad">
@@ -93,17 +94,36 @@
 			Image : <input type="file" name="dogImages" multiple>
 			<br><br>
 			<input type='button' class="w3-button w3-black w3-section" onclick='registerDog()' value="SUBMIT">
-				<i class="fa fa-paper-plane"></i>
+			<i class="fa fa-paper-plane"></i>
 			</button>
 		</form>
 		<hr>
 		<br><br>
-		<script type="text/javascript" src="https://s3.ap-northeast-2.amazonaws.com/dogeproject/resources/js/dog_web3.js"></script>
+		<script type="text/javascript"
+			src="https://s3.ap-northeast-2.amazonaws.com/dogeproject/resources/js/dog_web3.js"></script>
 		<script>
 			function registerDog() {
-				MyWeb3.reg_dog($('#dogBirth').val, $('#dogBreed').val, $('#dogGender').val,$('#').val,
-					true,$('#regiNo').val,$('#RFID').val,$('#dogDad').val,$('#dogMom').val,"dogId");
-				
+				console.log(typeof $('#dogGender').val());
+				reg_dog($('#dogBirth').val(), $('#dogBreed').val(), $('#dogGender').val(),
+					true, $('#regiNo').val(), $('#RFID').val(), $('#dogDad').val(), $('#dogMom').val(), "dogId");
+			}
+
+			function reg_dog(_birth, _kind, _gender, _alive, _regiNo, _rfid, _dadId, _momId, _inputId) {
+				let birth = (new Date(_birth).getTime() / 1000) - (3600 * 9)
+				let gender = _gender == 0 ? false : true;
+				contract.registerDog.sendTransaction(birth, _kind, gender, _alive, _regiNo, _rfid, _dadId, _momId,
+					(err, res) => {
+						if (err) console.log(err);
+						contract.newDog({}, (err2, eve) => {
+							if (err2) console.log(err2);
+							if (eve.args.owner === web3.eth.accounts[0]) {
+								//find_dog(eve.args.dogId.toNumber());
+								$('#' + _inputId).val(eve.args.dogId.toNumber());
+								$('#form1').submit();
+							}
+						});
+					}
+				);
 			}
 		</script>
 </body>

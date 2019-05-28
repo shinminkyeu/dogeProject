@@ -1,5 +1,5 @@
 let contract;
-const contractAddress = "0xfd220453e84762842bae8f1ed64e50dcf2141d7d";
+const contractAddress = "0xb3da206021b55620ca77a75d71111e4710955d3d";
 let doge_ABI = [
 	{
 		"constant": true,
@@ -546,7 +546,8 @@ const sigParams = [
         type: 'string',
         name: 'message',
         value: '지갑을 인증해 주세요.\nPlease verify your wallet.'
-    }];
+	}
+];
 $(document).ready(async () => {
     if (ethereum) { // 최신 메타마스크라면,
         const web3 = new Web3(ethereum);
@@ -561,66 +562,5 @@ $(document).ready(async () => {
         // 메타마스크가 없으면 실행될 코드
     }
     // contract 객체 할당
-    contract = web3.eth.contract(doge_ABI).at(contractAddress);
-    $('#doge-home').attr('href', location.hostname)
-    if (location.href == location.hostname + '/user') {
-        $('#doge-user').text('Logout')
-            .attr('href', location.hostname + '/logout')
-    } else {
-        $('<form name="account" method="post"></form>')
-            .attr('action', location.hostname + '/user')
-            .append('<input type="hidden" name="account" value=' + web3.eth.accounts[0] + '>')
-            .insertAfter('#doge-user');
-        $('#doge-user').text('User')
-            .attr('href', '#;')
-            .click(document.account.submit());
-    }
+	contract = web3.eth.contract(doge_ABI).at(contractAddress);
 });
-function reg_dog(_birth, _kind, _gender, _alive, _regiNo, _rfid, _dadId, _momId, _inputId) {
-    let birth = (new Date(_birth).getTime() / 1000) - (3600 * 9)
-    contract.registerDog.sendTransaction(birth,_kind,_gender,_alive, _regiNo, _rfid, _dadId, _momId,
-         (err, res) => {
-            if (err) console.log(err);
-            contract.newDog({}, (err2, eve) => {
-                if (err2) console.log(err2);
-                if (eve.args.owner === web3.eth.accounts[0]) {
-                    find_dog(eve.args.dogId.toNumber());
-                    $('#'+_inputId).val = eve.args.dogId.toNumber();
-                }
-            });
-        }
-    );
-}
-/*
-function find_dog(id) {
-    contract.findDog.call(id, (err, res) => {
-        if (err) console.log(err)
-        let birth = new Date(res[0].toNumber() * 1000)
-        $('#dog').html('<ul>' +
-            '<li>개 생일 : ' + birth + '</li>' +
-            '<li>개 품종 : ' + res[1].toNumber() + '</li>' +
-            '<li>개 성별 : ' + (res[2] ? '암컷' : '수컷') + '</li>' +
-            '<li>생존 여부 : ' + res[3].toString() + '</li>' +
-            '<li>등록 번호 : ' + res[4] + '</li>' +
-            '<li>RFID : ' + res[5] + '</li></ul>')
-    })
-}
-//*/
-/*
-function signMsg() {
-    let from = web3.eth.accounts[0];
-    $('input[name=from]').val(from);
-    $('input[name=data]').val(JSON.stringify(sigParams))
-    web3.currentProvider.sendAsync({
-        method: 'eth_signTypedData',
-        params: [sigParams, from],
-        from: from,
-    }, function (err, res) {
-        if (err) return console.error(err)
-        console.log(res.result);
-        $('input[name=sigRes]').val(res.result);
-        document.signData.submit();
-    })
-}
-
-//*/
