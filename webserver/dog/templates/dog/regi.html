@@ -18,7 +18,7 @@
 	<!-- Navbar (fixed on top) 내비게이션 바 (위쪽에 고정) -->
 	<div class="w3-top">
 		<div class="w3-bar w3-white w3-wide w3-padding w3-card">
-			<a href="#home" class="w3-bar-item w3-button">
+			<a href="//" class="w3-bar-item w3-button">
 				<b>Doge</b>
 				gram
 			</a>
@@ -37,19 +37,19 @@
 		<h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"> Register a dog </h3><br>
 		
 		<form action="/dog/register/" method="POST">{% csrf_token %}
-			<input type="hidden" name="dogId" value="">
-			Name<input class="w3-input w3-border" name="dogName" type="text"></p>
-			Birthday<br><input style="width:100%;height:40px;"type="date" name="dogBirth">
+			<input type="hidden" name="dogId" id="dogId" value="">
+			Name<input class="w3-input w3-border" id="dogName" name="dogName" type="text"></p>
+			Birthday<br><input style="width:100%;height:40px;"type="date" name="dogBirth" id="dogBirth">
 			<br><br>
 			<!--부모견 정보 입력-->
-			<select class="w3-select" style="height:40px;" name="dogDad">
+			<select class="w3-select" style="height:40px;" name="dogDad" id="dogDad">
 				<option value="0">Select Dad Dog</option>
 				{%for dogId, dogName in MydogList%}
 				<option value={{dogId}}>{{dogName}}</option>
 				{%endfor%}
 			</select>
 			<br><br>
-			<select class="w3-select" style="height:40px;" name="dogMom">
+			<select class="w3-select" style="height:40px;" name="dogMom" id="dogMom">
 				<option value="0">Select Mom Dog</option>
 				{%for dogId, dogName in MydogList%}
 				<option value={{dogId}}>{{dogName}}</option>
@@ -57,14 +57,14 @@
 			</select>
 			<br><br>
 			<!--강아지 상세정보 입력-->
-			<select class="w3-select" style="height:40px;" name="dogBreed">
+			<select class="w3-select" style="height:40px;" name="dogBreed" id="dogBreed">
 				<option value="" disabled selected>Select Breed</option>
 				{%for index, value, size in breedList%}
 				<option value={{index}}>{{value}}</option>
 				{%endfor%}
 			</select>
 			<br><br>
-			<select class="w3-select" style="height:40px;" name="dogGender">
+			<select class="w3-select" style="height:40px;" name="dogGender" id="dogGender">
 				<option value="" disabled selected>Select Gender</option>
 				<option value="0">Male</option>
 				<option value="1">Female</option>
@@ -85,22 +85,26 @@
 				<input class="w3-input w3-border" name="coatColor" type="text"></p>
 			<!--강아지 등록번호 입력-->
 			<p><label>Registration Number</label>
-				<input class="w3-input w3-border" name="regiNo" type="text"></p>
+				<input class="w3-input w3-border" name="regiNo" id="regiNo" type="text"></p>
 			<p><label>RFID</label>
-				<input class="w3-input w3-border" name="RFID" type="text"></p>
+				<input class="w3-input w3-border" name="RFID" id="RFID" type="text"></p>
 			<br>
 			<!--강아지 사진 입력-->
 			Image : <input type="file" name="dogImages" multiple>
 			<br><br>
-			<button class="w3-button w3-black w3-section" type="submit">
+			<input type='button' class="w3-button w3-black w3-section" onclick='registerDog()' value="SUBMIT">
 				<i class="fa fa-paper-plane"></i>
-				SUBMIT
 			</button>
 		</form>
-		
 		<hr>
 		<br><br>
+		<script type="text/javascript" src="https://s3.ap-northeast-2.amazonaws.com/dogeproject/resources/js/dog_web3.js"></script>
 		<script>
+			function registerDog() {
+				MyWeb3.reg_dog($('#dogBirth').val, $('#dogBreed').val, $('#dogGender').val,$('#').val,
+					true,$('#regiNo').val,$('#RFID').val,$('#dogDad').val,$('#dogMom').val,"dogId");
+				
+			}
 		</script>
 </body>
 
