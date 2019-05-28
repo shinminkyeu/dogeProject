@@ -4,9 +4,10 @@
     - 김영우 : 웹 디자인.
 
 Block Chain (Ethereum)
-    - solidity : >=0.4.0 <0.6.0
-    - truffle
-    - MetaMask
+    - solidity  : >=0.4.0 <0.6.0 
+    - compile   : 0.5.1
+    - truffle   :
+    - MetaMask  :
 
 Web
     - Framework         : dJango
@@ -16,7 +17,7 @@ Web
     - S3                : 사진저장
     - boto3             : python => S3 연결 API  (pip install boto3)
     - django_storages   : django프레임 워크 스토리지 (pip install django_storages)
-    - HTML              :
+    - HTML              : 5
     - JavaScript        :
     - CSS               :
 
