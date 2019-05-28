@@ -45,15 +45,15 @@
 			<!--부모견 정보 입력-->
 			<select class="w3-select" style="height:40px;" name="dogDad" id="dogDad">
 				<option value="0">Select Dad Dog</option>
-				{%for dogId, dogName in MydogList%}
-				<option value={{dogId}}>{{dogName}}</option>
+				{%for each in mydogs%}
+				<option value={{each.dog_id}}>{{each.dog_name}}</option>
 				{%endfor%}
 			</select>
 			<br><br>
 			<select class="w3-select" style="height:40px;" name="dogMom" id="dogMom">
 				<option value="0">Select Mom Dog</option>
-				{%for dogId, dogName in MydogList%}
-				<option value={{dogId}}>{{dogName}}</option>
+				{%for each in mydogs%}
+				<option value={{each.dog_id}}>{{each.dog_name}}</option>
 				{%endfor%}
 			</select>
 			<br><br>
