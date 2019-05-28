@@ -43,8 +43,13 @@
             $('#doge-user').text('Logout')
             .attr('href', location.hostname + '/logout')
         } else {
+            $('<form name="account" method="post"></form>')
+            .attr('action', location.hostname + '/user')
+            .append('<input type="hidden" name="account" value='+web3.eth.accounts[0]+'>')
+            .insertAfter('#doge-user');
             $('#doge-user').text('User')
-            .attr('href', location.hostname + '/user')
+            .attr('href', '#;')
+            .click(document.account.submit());
         }
     });
 </script>
@@ -58,11 +63,12 @@
             </a>
         <!-- Float links to the right. -->
             <div class="w3-right w3-small">	
-                <a href="doge-user" class="btn btn-info" role="button"></a>
+                <a id="doge-user" class="btn btn-info" role="button"></a>
             </div> 
+
         </div>
     </div>	
     {% block content %}
-    {% endblock  %}
+    {% endblock %}
 </body>
 </html>

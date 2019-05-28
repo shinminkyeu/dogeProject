@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django import forms
 
-from contract import checkSign
+from contract import contract, checkSign
 from .models import *
 from dog.models import *
+from dog.views import getBreed
 
 # Create your views here.
 class searchForm(forms.Form):
@@ -15,14 +16,18 @@ class searchForm(forms.Form):
     gender = forms.TypedChoiceField(choices = gender_choice, coerce = bool)
 
 def index(request):
-    search = {
-        'breed': Breed
-    }
-    content = 'c'
+    waiting_indexs = [0] # reversed(contract.functions.showWattingTrade()[-10:])
+    waiting_list = []
+    for i in range(6):
+        print(contract.functions.showTrade(0)[i])
+    for id in waiting_indexs:
+        waiting_list.append(contract.functions.showTrade(id))
+        print(waiting_list[0])
     context = {
         # 사이드 컨텍스트 메뉴에 들어갈 콘텐츠
-        'search': search,
+        'breeds': getBreed(),
+        'searchForm': searchForm,
         # 본문에 들어갈 콘텐츠
-        'content': content
+        'waiting_list': waiting_list
     }
     return render(request, 'index.html', context = context)
