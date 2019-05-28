@@ -24,7 +24,7 @@ EC2 환경
     - Python 3.7.3
     - pip 19.1.1
     - dJango 2.2.1
-    - web3 4.9.2
+    - Web3.py 4.9.2
     - Pillow 6.0.0
     - boto3 1.9.153
     - django_storages 1.7.1

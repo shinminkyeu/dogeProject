@@ -1,8 +1,9 @@
+<!-- 강아지 등록 페이지 -->
 <!DOCTYPE html>
 <html>
 
 <head>
-	<title> Register Page </title>
+	<title> Dog Register Page </title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -10,11 +11,9 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
 	<style>
 	</style>
 </head>
-
 <body>
 	<!-- Navbar (fixed on top) 내비게이션 바 (위쪽에 고정) -->
 	<div class="w3-top">
@@ -23,7 +22,6 @@
 				<b>Doge</b>
 				gram
 			</a>
-
 			<!-- Float links to the right. -->
 			<div class="w3-right w3-hide-small">
 				<a href="find_page.html" class="w3-bar-item w3-button"> Find </a>
@@ -37,11 +35,28 @@
 	<!-- Register a dog Section (강아지 등록) -->
 	<div class="w3-container w3-padding-32" id="Register">
 		<h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"> Register a dog </h3><br>
+		
 		<form action="/dog/register/" method="POST">{% csrf_token %}
 			<input type="hidden" name="dogId" value="">
 			Name<input class="w3-input w3-border" name="dogName" type="text"></p>
 			Birthday<br><input style="width:100%;height:40px;"type="date" name="dogBirth">
 			<br><br>
+			<!--부모견 정보 입력-->
+			<select class="w3-select" style="height:40px;" name="dogDad">
+				<option value="0">Select Dad Dog</option>
+				{%for dogId, dogName in MydogList%}
+				<option value={{dogId}}>{{dogName}}</option>
+				{%endfor%}
+			</select>
+			<br><br>
+			<select class="w3-select" style="height:40px;" name="dogMom">
+				<option value="0">Select Mom Dog</option>
+				{%for dogId, dogName in MydogList%}
+				<option value={{dogId}}>{{dogName}}</option>
+				{%endfor%}
+			</select>
+			<br><br>
+			<!--강아지 상세정보 입력-->
 			<select class="w3-select" style="height:40px;" name="dogBreed">
 				<option value="" disabled selected>Select Breed</option>
 				{%for index, value, size in breedList%}
@@ -51,8 +66,8 @@
 			<br><br>
 			<select class="w3-select" style="height:40px;" name="dogGender">
 				<option value="" disabled selected>Select Gender</option>
-				<option value="1">Male</option>
-				<option value="2">Female</option>
+				<option value="0">Male</option>
+				<option value="1">Female</option>
 			</select>
 			<br><br>
 			<select class="w3-select" style="height:40px;" name="coatLength">
@@ -68,11 +83,13 @@
 			<br><br>
 			<p><label>Coat Color</label>
 				<input class="w3-input w3-border" name="coatColor" type="text"></p>
+			<!--강아지 등록번호 입력-->
 			<p><label>Registration Number</label>
 				<input class="w3-input w3-border" name="regiNo" type="text"></p>
 			<p><label>RFID</label>
 				<input class="w3-input w3-border" name="RFID" type="text"></p>
 			<br>
+			<!--강아지 사진 입력-->
 			Image : <input type="file" name="dogImages" multiple>
 			<br><br>
 			<button class="w3-button w3-black w3-section" type="submit">
@@ -80,6 +97,7 @@
 				SUBMIT
 			</button>
 		</form>
+		
 		<hr>
 		<br><br>
 		<script>

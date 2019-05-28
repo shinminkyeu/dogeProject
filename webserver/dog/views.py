@@ -39,9 +39,13 @@ def register(request) :
         return redirect(register)
     else :
         context = {
-            'breedList'  : getBreed()
+            'breedList' : getBreed(),
+            'MydogList' : findMyDog()
         }
         return render(request, 'dog/regi.html', context)
+
+def findMyDog():
+    pass
 
 def getBreed(_size=10):
     rVal = []
