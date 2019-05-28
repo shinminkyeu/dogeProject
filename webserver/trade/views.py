@@ -18,8 +18,11 @@ class searchForm(forms.Form):
 def index(request):
     waiting_indexs = [0] # reversed(contract.functions.showWattingTrade()[-10:])
     waiting_list = []
+    for i in range(6):
+        print(contract.functions.showTrade(0)[i])
     for id in waiting_indexs:
         waiting_list.append(contract.functions.showTrade(id))
+        print(waiting_list[0])
     context = {
         # 사이드 컨텍스트 메뉴에 들어갈 콘텐츠
         'breeds': getBreed(),
