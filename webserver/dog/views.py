@@ -18,14 +18,19 @@ def register(request) :
         myAddress = request.session.get('account', '0x6347fb458F79309657327F8F4Da647d21d9CF530')
         context = {
             'breedList' : getBreed(),
-            'mydogs'    : findMyDog(myAddress)
+            'mydogs'    : findMyDogs(myAddress)
         }
         return render(request, 'dog/regi.html', context)
 
+def info(request):
+    if request.method == 'POST':
+        pass
+    else:
+        pass
+    return render(request, 'dog/regi.html')
 
 
-
-def findMyDog(_address):
+def findMyDogs(_address):
     mydogsId = contract.functions.showOwnerToDog(_address).call()
     mydogs = []
     for dogId in mydogsId:
@@ -34,6 +39,10 @@ def findMyDog(_address):
         except:
             pass
     return mydogs
+
+def findDogInDapp(_dogId):
+    
+    pass
 
 def getBreed(_size=10):
     rVal = []
