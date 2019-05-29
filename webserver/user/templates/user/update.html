@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+{% include 'sign.html'%}
 <script>
     $(document).ready(() => {
         $('form[name=account]').remove()
@@ -18,6 +19,6 @@
 <form method = 'POST'>
     {% csrf_token %}
     {{ form }}
-    <input type = 'submit' value = '정보 등록'>
+    <input type = 'button' value = '정보 등록' onclick = 'sign()'>
 </form>
 {% endblock  %}
