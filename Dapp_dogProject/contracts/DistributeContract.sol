@@ -22,6 +22,15 @@ contract DistributeContract is DogApp {
         require(trade[_tradeid].owner == msg.sender, "You are not owner of this trade");
         _;
     }
+    function showDogTrade(uint _dogId) external view returns(uint[] memory) {
+        return dogTrade[_dogId];
+    }
+    function showOwnerTrade(address _address) external view returns(uint[] memory) {
+        return ownerTrade[_address];
+    }
+    function showBuyerTrade(address _address) external view returns(uint[] memory) {
+        return buyerTrade[_address];
+    }
     function showTrade(uint _tradeId) public view returns(uint32, uint8, STATE, address payable, address payable, string memory) {
         return(trade[_tradeId].dogId, trade[_tradeId].price, trade[_tradeId].state,trade[_tradeId].owner,
          trade[_tradeId].buyer, trade[_tradeId].region);
@@ -42,6 +51,8 @@ contract DistributeContract is DogApp {
     function registerTrade(uint32 _dogId, uint8 _price, string memory _region) public onlyDogOwner(_dogId) returns(uint)  {
         require(dogs[_dogId].alive,"죽은 강아지는 분양할 수 없습니다.");
         uint id = trade.push(Trade(_dogId, _price, STATE.WAITTING, msg.sender, temp, _region))-1;
+        dogTrade[_dogId].push(id);
+        ownerTrade[msg.sender].push(id);
         wattingCount++;
         return id;
     }
