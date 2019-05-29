@@ -35,6 +35,11 @@
 		background-color: #f1f1f1;
 	}
 	
+	#transTable td a {
+		display: block;
+		color: black;
+	}	
+	
 	
 	</style>
 	</head>	
@@ -56,7 +61,6 @@
 		
 		<!-- 수정, 개목록, 개등록, 거래등록 버튼들 -->
 		<p style="margin-top:100px">
-			<a href="editinfo_page.html" class="btn btn-light" role="button">Edit info</a>
 			<a href="find_page.html" class="btn btn-light" role="button">Find</a>
 			<a href="register_page.html" class="btn btn-light" role="button">Register</a>
 			<a href="rehome_page.html" class="btn btn-light" role="button">Rehome</a>
@@ -83,30 +87,30 @@
 			<div class="w3-row w3-greyscale" id="mydoggallery">
 				<div class="w3-col 13 s6">
 					<div class="w3-container">
-						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\pug.jpg" style="width:250px">
+						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\pug.jpg" style="width:150px">
 						<p><b>Buster</b></p>
 					</div>
 			
 			
 					<div class="w3-container">
-						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\chowchow.jpg" style="width:250px">
+						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\chowchow.jpg" style="width:150px">
 						<p><b>Chubber</b></p>
 					</div>
 				</div>	
 				
 				<div class="w3-col 13 s6">
 					<div class="w3-container">
-						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\bulldog.jpg" style="width:250px">
+						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\bulldog.jpg" style="width:150px">
 						<p><b>Billy</b></p>
 					</div>
 			
 					<div class="w3-container">
-						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\yorkshire_terrier.jpg" style="width:250px">
+						<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\yorkshire_terrier.jpg" style="width:150px">
 						<p><b>Mina</b></p>
 					</div>
 				</div>	
 			</div>
-	
+		</div>
 		
 		<!-- 회원 거래 내역 -->
 		<div class="w3-container w3-padding-32" id="User Transactions">
@@ -118,12 +122,12 @@
 				<th style="width:40%;">Title</th>
 			</tr>
 			<tr>
-				<td>2018-01-11</td>
-				<td>Baby pug is looking for a family!</td>
+				<td><a href="trans_page.html">2018-01-11</a></td>
+				<td><a href="trans_page.html">Baby pug is looking for a family!</a></td>
 			</tr>
 			<tr>
-				<td>2019-05-18</td>
-				<td>Billy the bulldog needs your love:)</td>
+				<td><a href="trans_page_2.html">2019-05-18</a></td>
+				<td><a href="trans_page_2.html">Billy the bulldog needs your love:)</a></td>
 			</tr>
 		</table>
 		</div>
