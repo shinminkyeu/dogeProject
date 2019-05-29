@@ -15,6 +15,9 @@ class searchForm(forms.Form):
     ageEnd = forms.IntegerField(min_value = 0)
     gender = forms.TypedChoiceField(choices = gender_choice, coerce = bool)
 
+def main(request):
+    return render(request, 'trade/main.html')
+
 def index(request):
     waiting_indexs = reversed(contract.functions.showWattingTrade().call()[-10:])
     waiting_list = []

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Metamask Page </title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		
+	<style>
+		#loader {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			z-index: 1;
+			width: 150px;
+			height: 150px;
+			margin: -75px 0 0 -75px;
+			border: 16px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 16px solid #3498db;
+			width: 120px;
+			height: 120px;
+			-webkit-animation: spin 2s linear infinite;
+			animation: spin 2s linear infinite;
+		}
+
+		@-webkit-keyframes spin {
+			0% { -webkit-transform: rotate(0deg); }
+			100% { -webkit-transform: rotate(360deg); }
+		}
+
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+
+	
+		.animate-bottom {
+			position: relative;
+			-webkit-animation-name: animatebottom;
+			-webkit-animation-duration: 1s;
+			animation-name: animatebottom;
+			animation-duration: 1s
+		}
+
+		@-webkit-keyframes animatebottom {
+			from { bottom:-100px; opacity:0 } 
+			to { bottom:0px; opacity:1 }
+		}
+
+		@keyframes animatebottom { 
+			from{ bottom:-100px; opacity:0 } 
+			to{ bottom:0; opacity:1 }
+		}
+
+		#myDiv {
+			display: none;
+			text-align: center;
+		}
+	</style>
+	</head>	
+	<header>
+	<!-- Navbar (fixed on top) 내비게이션 바 (위쪽에 고정) -->
+		<div class="w3-top">
+			<div class="w3-bar w3-white w3-wide w3-padding w3-card">
+				<a href="main_page.html" class="w3-bar-item w3-button">
+					<b>Doge</b>
+					gram
+				</a>
+			
+			<!-- Float links to the right. -->
+				<div class="w3-right">	
+					<a href="userinfo_page.html" class="w3-bar-item w3-button"> User Info </a>
+					<a href="find_page.html" class="w3-bar-item w3-button"> Find </a>
+					<a href="user_page.html" class="w3-bar-item w3-button"> User </a>
+					<a href="register_page.html" class="w3-bar-item w3-button"> Register </a>
+					<a href="rehome_page.html" class="w3-bar-item w3-button"> Rehome </a>
+				</div> 
+			</div>
+		</div>	
+		<br><br>	
+	</header>
+	
+	<body onload="loadFunction()" style="margin:0;">
+	<div id="loader">
+	</div>
+	<div style="display:none;" id="errorText" class="animate-bottom">
+	<br><br><br><br><br><br>
+		<h2 style="text-align:center;">Insufficient Funds!</h2>
+		<p style="text-align:center;">There is not enough Ether in your Metamask account.<br>
+			Please check your account to ensure you have sufficient funds.
+		</p>
+	</div>
+	
+	
+
+<script>
+	var varMeta;
+	
+	function loadFunction() {
+		varMeta = setTimeout(showPage, 3000);
+	}
+	
+	function showPage() {
+		document.getElementById("loader").style.display = "none";
+		document.getElementById("errorText").style.display = "block";
+	}	
+</script>
+
+</body>
+
+</html>
