@@ -1,0 +1,23 @@
+<script>
+    function sign() {
+        let from = web3.eth.accounts[0];
+        let sigParams = [
+        {
+            type: 'string',
+            name: 'message',
+            value: '지갑을 인증해 주세요.\nPlease verify your wallet.'
+        }];
+        web3.currentProvider.sendAsync({
+            method: 'eth_signTypedData',
+            params: [sigParams, from],
+            from: from,
+        }, function (err, res) {
+            if (err) {
+                alert('지갑을 인증하지 않으면 서비스를 이용할 수 없습니다!');
+                location.href = '//' + location.hostname;
+            }
+            $('#sigData').val(res.result);
+            $('form').submit();
+        });
+    }
+</script>

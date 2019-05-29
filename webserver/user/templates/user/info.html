@@ -1,10 +1,24 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<script>
-    $(document).ready(() => {
-        $('#doge-user').attr('href', 'logout').text('Logout').off('click');
-        $('form[name=account]').remove();
-    });
-</script>
+    <script>
+        $(document).ready(() => {
+            $('#doge-user').attr('href', 'logout').text('Logout').off('click');
+            $('form[name=account]').remove();
+        });
+    </script>
+    {% if requireSign %}
+        {% include 'sign.html' %}
+        <form method = 'POST'>
+            {% csrf_token %}
+            <input type = 'hidden' name = 'address' value = '{{ requireSign }}'>
+            <input type = 'hidden' name = 'sigData' id = 'sigData'>
+        </form>
+        <script>
+            $(document).ready(() => {
+                sign();
+            });
+        </script>
+    {% else %}
+    {% endif %}
 {% endblock %}
