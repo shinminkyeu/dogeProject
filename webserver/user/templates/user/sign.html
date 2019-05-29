@@ -1,0 +1,40 @@
+<form name = 'sign' method = 'POST'>
+{% csrf_token %}
+    <input type = 'hidden' name = 'signed'>
+</form>
+<script>
+    $(document).ready(() => {
+        if (ethereum) {
+            web3 = new Web3(ethereum);
+            try {
+                await ethereum.enable();
+            } catch (err) {
+                // 권한 요청 거부시 코드
+            }
+        } else if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // 메타마스크가 없으면 실행될 코드
+        }
+        const from = web3.eth.accounts[0];
+        const sigParams = [
+        {
+            type: 'string',
+            name: 'message',
+            value: '지갑을 인증해 주세요.\nPlease verify your wallet.'
+        }];
+        web3.currentProvider.sendAsync({
+            method: 'eth_signTypedData',
+            params: [sigParams, from],
+            from: from,
+        }, function (err, res) {
+            if (err) {
+                alert('지갑을 인증하지 않으면 서비스를 이용할 수 없습니다!');
+                location.href = '//' + location.hostname;
+            }
+            document.sign.signed.value = res.result;
+            document.sign.submit();
+        })
+
+    });
+</script>

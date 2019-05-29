@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<script>
+    $(document).ready(() => {
+        $('#doge-user').attr('href', 'logout').text('Logout').off('click');
+        $('form[name=account]').remove();
+    });
+</script>
+{% endblock %}
