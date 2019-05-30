@@ -4,7 +4,7 @@ from django.utils import timezone
 from .models import Picture, Dog, Breed
 from .templates import *
 from contract import *
-s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/dog_images/"
+s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
 
 def register(request) :
     if request.method == 'POST':
@@ -26,7 +26,7 @@ def info(request):
     if request.method == 'POST':
         pass
     else:
-        pass
+        dogDapp, dogDB, dogPicture = findDog(15)
     return render(request, 'dog/regi.html')
 
 
@@ -40,9 +40,44 @@ def findMyDogs(_address):
             pass
     return mydogs
 
-def findDogInDapp(_dogId):
-    
-    pass
+def findDog(_dogId):
+    returnDog = {}
+    returnDog['dapp'] = _findDogInDapp(_dogId)
+    returnDog['db'], returnDog['picture'] = _findDogInDB(_dogId)
+    return returnDog['dapp'], returnDog['db'], returnDog['picture']
+
+class DogDapp:
+    def __init__(self, _dogInfo, _dogParent, _dogChildren, _dogTrades):
+        import datetime
+        _birth = datetime.datetime.fromtimestamp(_dogInfo[0])
+        self.birth = _birth.strftime('%Y년 %m월 %d일')
+        self.breed = _dogInfo[1]
+        self.gender = _dogInfo[2]
+        self.alive = _dogInfo[3]
+        self.regiNo = _dogInfo[4]
+        self.rfid = _dogInfo[5]
+        self.mom = _dogParent[0]
+        self.dad = _dogParent[1]
+        self.children = _dogChildren
+        self.trades = _dogTrades
+
+def _findDogInDapp(_dogId):
+    dogInfo = contract.functions.findDog(_dogId).call()
+    dogParent = contract.functions.showChildToParent(_dogId).call()
+    dogChildren = contract.functions.showParentToChildren(_dogId).call()
+    dogTrade = []#contract.functions.showParentToChildren(_dogId).call()
+    _dogObject = DogDapp(dogInfo, dogParent, dogChildren, dogTrade)
+    return _dogObject
+
+def _findDogInDB(_dogId):
+    dogInfo = Dog.objects.get(dog_id = _dogId)
+    dogPoto = Picture.objects.filter(dog = dogInfo)
+    dogPotos = []
+    for each in dogPoto:
+        temp = ""
+        temp = s3_dogImage_Path+str(each.picture_url)
+        dogPotos.append(temp)
+    return dogInfo, dogPotos
 
 def getBreed(_size=10):
     rVal = []
