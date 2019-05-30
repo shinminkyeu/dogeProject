@@ -28,11 +28,10 @@ def index(request):
         'breeds': getBreed(),
         'searchForm': searchForm,
         # 본문에 들어갈 콘텐츠
-        'waiting_list': waiting_list
+        'waiting_list': waiting_list,
     }
     try:
-        context['alertMsg'] = request.session['alertMsg']
-        del request.session['alertMsg']
+        context['alertMsg'] = request.session.pop('alertMsg')
     except:
         pass
     return render(request, 'index.html', context = context)

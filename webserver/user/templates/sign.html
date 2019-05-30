@@ -12,12 +12,14 @@
             params: [sigParams, from],
             from: from,
         }, function (err, res) {
-            if (err) {
+            if (err) console.error(err)
+            if (res.result) {
+                $('#sigData').val(res.result);
+                $('form').submit();
+            } else {
                 alert('지갑을 인증하지 않으면 서비스를 이용할 수 없습니다!');
-                location.href = '//' + location.hostname;
+                location.href = "{% url 'trade:index' %}";
             }
-            $('#sigData').val(res.result);
-            $('form').submit();
         });
     }
 </script>

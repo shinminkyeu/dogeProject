@@ -5,7 +5,8 @@ from . import views
 app_name = 'user'
 urlpatterns = [
     path('', views.info, name = 'info'),
-    path('update', views.update, name = 'update'),
-    path('join', views.join, name = 'join'),
-    path('logout', views.logout, name = 'logout')
+    path('update/', views.update, name = 'update'),
+    path('join/', views.join, name = 'join'),
+    path('logout/', views.logout, name = 'logout'),
+    path('<user_addr>/', views.view, name = 'view')
 ]

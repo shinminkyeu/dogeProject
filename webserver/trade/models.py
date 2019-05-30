@@ -33,3 +33,5 @@ class TradeImage(models.Model):
 class RegionTable(models.Model):
     stepOne = models.CharField(max_length = 10)
     stepTwo = models.CharField(max_length = 10)
+    def __str__(self):
+        return self.stepOne + ' - ' + self.stepTwo

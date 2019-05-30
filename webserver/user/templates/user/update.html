@@ -8,8 +8,10 @@
         $('#doge-user').remove()
         {% if doesJoin %}
             $('#varMsg').text('계좌의 정보를 등록합니다.')
+            $('#submit').val('정보 등록')
         {% else %}
             $('#varMsg').text('계좌의 정보를 수정합니다.')
+            $('#submitButton').val('정보 수정')
         {% endif %}
     })
 </script>
@@ -19,6 +21,6 @@
 <form method = 'POST'>
     {% csrf_token %}
     {{ form }}
-    <input type = 'button' value = '정보 등록' onclick = 'sign()'>
+    <input id = 'submitButton' type = 'button' onclick = 'sign()'>
 </form>
 {% endblock  %}
