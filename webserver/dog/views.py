@@ -26,8 +26,8 @@ def info(request):
     if request.method == 'POST':
         pass
     else:
-        dogDapp, dogDB, dogPicture = findDog(15)
-    return render(request, 'dog/regi.html')
+        dogDapp, dogDB, dogPicture = findDog(16)
+    return render(request, 'dog/info.html')
 
 
 def findMyDogs(_address):
