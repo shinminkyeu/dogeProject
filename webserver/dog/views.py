@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect
 from django.db import models
 from django.utils import timezone
-from .models import Picture, Dog, Breed
+from .models import *
 from trade.models import RegionTable
 from .templates import *
 from contract import *
-import PIL.Image as pilimg
 s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
 
 def _register(dog, images, account):
     import json
+    from django.core.files.base import ContentFile
+    import base64
     while True :
         event_filter = contract.events.newDog.createFilter(fromBlock='latest', argument_filters={'owner': account})
         if(event_filter.get_all_entries()):
@@ -18,18 +19,20 @@ def _register(dog, images, account):
             dog.save()
             if images:
                 for each in images:
-                    Picture.objects.create(dog = dog, picture_url = each)
+                    #print(each)
+                    Picture.objects.create(dog = dog, picture_url = ContentFile(base64.b64decode(each)))
             break
-
-
 
 def register(request) :
     if request.method == 'POST':
         import threading
+        import tempfile
         myAddress = request.session.get('account', '0x6347fb458F79309657327F8F4Da647d21d9CF530')
         dog = Dog(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
-        images = request.FILES.getlist('dogImages')
-        print(images)
+        inputImages = request.FILES.getlist('dogImages')
+        images = []
+        for each in inputImages:
+            images.append(each.read())
         regiDBThread = threading.Thread(target=_register, args=(dog,images,myAddress))
         regiDBThread.start()
          #_register(dog, images, myAddress)
