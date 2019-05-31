@@ -27,7 +27,7 @@ def info(request):
             # 예외가 발생하면 POST 제출된 주소를 세션에 임시로 저장한 후 예외 처리 페이지로 이동.
             try:
                 # DB에 유저가 없으면 User.DoesNotExist 예외 발생.
-                current_user = User.objects.get(pk = request.POST['address'])
+                User.objects.get(pk = request.POST['address'])
                 if request.session['account'] == request.POST['address']:
                     # 지갑 인증이 성공한 경우의 context 작성
                     return redirect('user:view', request.session['account'])
@@ -36,15 +36,16 @@ def info(request):
             # account 세션이 없거나 넘어온 주소와 일치하지 않으면 서명페이지로 이동.
             except KeyError:
                 request.session['address'] = request.POST['address']
+                print(request.session['address'])
                 context = {
                     'requireSign': request.session['address']
                 }
+                return render(request, 'user/info.html', context)
             # DB에 유저가 없을 경우 정보 등록 페이지로 이동
             except User.DoesNotExist:
                 request.session['address'] = request.POST['address']
                 request.session['alertMsg'] = '먼저 정보를 등록해 주세요.'
                 return redirect('user:join')
-        return render(request, 'user/info.html', context)
     # 주소를 통한 악의적 접근의 경우.
     else:
         request.session['alertMsg'] = '잘못된 접근입니다'
