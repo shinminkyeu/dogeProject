@@ -18,41 +18,51 @@ def saveAlert(context, request):
         pass
     return context
 
+# form의 서명을 확인하는 함수.
 def isSignedForm(form, address):
     if checkSign(form.cleaned_data['sigData'], address):
         del form.fields['sigData']
         return True
     return False
 
+# UserForm을 저장하는 함수. save를 오버라이드 하고 싶었다.
 def saveUserForm(userForm, address):
     userModel = userForm.save(commit = False)
     userModel.user_address = address
     userModel.save()
 
+# 개 한 마리의 thumbnail을 이름과 대표사진의 dict로 반환하는 함수.
 def getThumbnailOfDog(dog_id):
     dog = Dog.objects.get(pk = dog_id)
     dog_thumbnail = { 'name': dog.dog_name }
     dog_pictures = Picture.objects.filter(dog = dog_id)
-    dog_picture_path = ''
-    if dog.dog_picture_represented == 0:
-        if dog.dog_picture_counter:
+    if dog_pictures.exists():
+        if dog.dog_picture_represented:
+            dog_picture_path = dog_pictures[dog.dog_picture_represented - 1].picture_url
+        else:
             dog_picture_path = dog_pictures[0].picture_url
-    else:
-        dog_picture_path = dog_pictures[dog.dog_picture_represented - 1].picture_url
-    if dog_picture_path:
         dog_thumbnail['picture'] = s3_dogImage_Path + dog_picture_path
     return dog_thumbnail
 
-def findThumbnailOfDogs(address):
+# 개 여러 마리의 thumbnail을 thumbnail dict의 list 형태로 반환.
+def findDogsByOwner(address):
     dog_ids = contract.functions.showOwnerToDog(Web3.toChecksumAddress(address)).call()
     thumbnail_of_dogs = []
     for dog_id in dog_ids:
         dogs.append(getThumbnailOfDog(dog_id))
     return thumbnail_of_dogs
 
+# 거래의 날짜, 제목, 상태 리스트를 번환.
+def findTradesByOwner(address):
+    ownedTrades = []
+
+def findTradesByBuyer(address):
+    pass
+
+# 로그인 상태를 확인하고, 없으면 서명을 요구하는 함수.
 def verify(request):
     if request.method == 'POST':
-        # 서명 데이터가 넘어왔을 경우. (모든 과정 처리 후 세션에 임시로 저장된 주소 삭제)
+        # 서명 데이터가 넘어왔을 경우.
         try:
             address = request.session.pop('address')
             if checkSign(request.POST['sigData'], address):
@@ -62,7 +72,7 @@ def verify(request):
             else:
                 request.session['alertMsg'] = '서명 데이터가 올바르지 않습니다.'
                 return redirect('trade:index')
-        # 주소 데이터가 넘어왔을 경우. (sigData에서 KeyError)
+        # 주소 데이터가 넘어왔을 경우
         except KeyError:
             try:
                 address = request.POST['address']
@@ -95,7 +105,7 @@ def info(request, user_addr):
     context = { 'User': current_user }
     if hash(user_addr) == hash(request.session.get('account')):
         context['owner'] = True
-    thumbnail_of_dogs = findThumbnailOfDogs(user_addr)
+    thumbnail_of_dogs = findDogsByOwner(user_addr)
     if thumbnail_of_dogs:
         context['Dogs'] = thumbnail_of_dogs
     context = saveAlert(context, request)
@@ -114,10 +124,8 @@ def join(request):
         # 제출한 정보가 유효한지 확인.
         if form.is_valid():
             address = request.session.pop('address')
-            # 서명 데이터 확인.
             if isSignedForm(form, address):
                 saveUserForm(form, address)
-                # 유저를 DB에 저장한 후, 자동 로그인.
                 request.session['account'] = address
                 request.session['alertMsg'] = '정보를 등록했습니다.'
                 return redirect('user:info', address)

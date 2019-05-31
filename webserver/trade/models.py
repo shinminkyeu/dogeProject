@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # 거래 이미지에 대한 이름 정책 (거래 id/이미지 일련번호.확장자)
 def img_name_policy(instance, filename):
@@ -22,6 +23,8 @@ class Trade(models.Model):
     trade_text = models.TextField()
     # 분양 이미지의 일련번호
     trade_img_counter = models.PositiveSmallIntegerField(default = 0)
+    # 분양글 게시 날짜
+    trade_apply_time = models.DateTimeField(default = timezone.now)
 
 # 거래 이미지 테이블.
 class TradeImage(models.Model):
