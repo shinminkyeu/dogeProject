@@ -4,7 +4,7 @@
 <!-- Register a dog Section (강아지 등록) -->
 <div class="w3-container w3-padding-32" id="Register">
 	<h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"> Register a dog </h3><br>
-	<form action="/dog/register/" method="POST" id="form1" enctype="multipart/form-data">{% csrf_token %}
+	<form action="{% url 'dog:register' %}" method="POST" id="form1" enctype="multipart/form-data">{% csrf_token %}
 		<input type="hidden" name="dogId" id="dogId" value="">
 		Name<input class="w3-input w3-border" id="dogName" name="dogName" type="text"></p>
 		Birthday<br><input style="width:100%;height:40px;" type="date" name="dogBirth" id="dogBirth">

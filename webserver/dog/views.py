@@ -5,21 +5,35 @@ from .models import Picture, Dog, Breed
 from trade.models import RegionTable
 from .templates import *
 from contract import *
+import PIL.Image as pilimg
 s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
 
 def _register(dog, images, account):
-    event_filter = contract.events.newDog.createFilter(fromBlock='latest', argument_filters={'owner': account})
-    print(event_filter, end = " : ")
-    print(event_filter.get_all_entries())
+    import json
+    while True :
+        event_filter = contract.events.newDog.createFilter(fromBlock='latest', argument_filters={'owner': account})
+        if(event_filter.get_all_entries()):
+            eVal = event_filter.get_all_entries()[0]['args']
+            dog.dog_id = eVal['dogId']
+            dog.save()
+            if images:
+                for each in images:
+                    Picture.objects.create(dog = dog, picture_url = each)
+            break
+
+
 
 def register(request) :
     if request.method == 'POST':
+        import threading
         myAddress = request.session.get('account', '0x6347fb458F79309657327F8F4Da647d21d9CF530')
         dog = Dog(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
-        #dog = Dog.objects.create(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
         images = request.FILES.getlist('dogImages')
-        _register(dog, images, myAddress)
-        return redirect(register)
+        print(images)
+        regiDBThread = threading.Thread(target=_register, args=(dog,images,myAddress))
+        regiDBThread.start()
+         #_register(dog, images, myAddress)
+        return redirect('dog:register')
         #return redirect('user:info', myAddress)
         """
         dog = Dog.objects.create(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
