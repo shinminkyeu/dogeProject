@@ -8,14 +8,22 @@ from contract import contract, checkSign
 from dog.models import Dog, Picture
 from dog.views import getBreed
 
+# alertMsg가 넘어올 경우 메시지를 제공하는 함수.
+def saveAlert(context, request):
+    try:
+        context['alertMsg'] = request.session.pop('alertMsg')
+    except:
+        pass
+    return context
+
 def verify(request):
     if request.method == 'POST':
         # 서명 데이터가 넘어왔을 경우. (모든 과정 처리 후 세션에 임시로 저장된 주소 삭제)
         try:
-            # 서명 데이터가 일치하는 경우.
+            # 서명 데이터가 일치하는 경우. 
             if checkSign(request.POST['sigData'], request.session['address']):
                 request.session['account'] = request.session.pop('address')
-                raise KeyError
+                return redirect('user:info', request.session['account'])
             # 서명 데이터가 일치하지 않는 경우.
             else:
                 request.session['alertMsg'] = '서명 데이터가 올바르지 않습니다.'
@@ -23,15 +31,14 @@ def verify(request):
                 return redirect('trade:index')
         # 주소 데이터가 넘어왔을 경우. (sigData에서 KeyError)
         except KeyError:
-            # 예외가 발생하면 POST 제출된 주소를 세션에 임시로 저장한 후 예외 처리 페이지로 이동.
             try:
                 # DB에 유저가 없으면 User.DoesNotExist 예외 발생.
                 User.objects.get(pk = request.POST['address'])
                 if request.session['account'] == request.POST['address']:
-                    # 지갑 인증이 성공한 경우의 context 작성
                     return redirect('user:info', request.session['account'])
                 else:
                     raise KeyError
+            # 예외가 발생하면 POST 제출된 주소를 세션에 임시로 저장한 후 예외 처리 페이지로 이동.
             # account 세션이 없거나 넘어온 주소와 일치하지 않으면 서명페이지로 이동.
             except KeyError:
                 request.session['address'] = request.POST['address']
@@ -64,6 +71,7 @@ def info(request, user_addr):
                 dog_object['picture'] = Picture.objects.get(pk = dog.dog_picture_represented)
             dogs.append(dog_dict)
         context['Dogs'] = dogs
+    context = saveAlert(context, request)
     return render(request, 'user/info.html', context)
     
 
@@ -87,12 +95,12 @@ def join(request):
                 newUser.save()
                 request.session['account'] = request.session['address']
                 request.session['alertMsg'] = '정보를 등록했습니다.'
+                return redirect('user:info', request.session.pop('address'))
             # 사용자가 서명 데이터를 악의적으로 조작한 경우.
             else:
                 request.session['alertMsg'] = '유효하지 않은 서명입니다.'
-            # 절차가 끝난 후 세션에 임시로 저장된 주소 삭제.
-            del request.session['address']
-            return redirect('trade:index')
+                del request.session['address']
+                return redirect('trade:index')
         # 제출한 정보가 올바르지 않을 경우.
         else:
             request.session['alertMsg'] = '알맞은 정보를 등록해 주세요'
@@ -105,15 +113,11 @@ def join(request):
             'address': request.session['address'],
             'form': form.as_p()
         }
+        context = saveAlert(context, request)
     # User 버튼으로 address를 제출하지 않고, 주소로 바로 접근할 경우.
     except KeyError:
         request.session['alertMsg'] = '잘못된 접근입니다.'
         return redirect('trade:index')
-    # alertMsg가 넘어올 경우 메시지 제공.
-    try:
-        context['alertMsg'] = request.session.pop('alertMsg')
-    except:
-        pass
     return render(request, 'user/update.html', context)
 
 def update(request):
@@ -153,8 +157,5 @@ def update(request):
         'form': form.as_p()
     }
     # alertMsg가 넘어올 경우 메시지 제공.
-    try:
-        context['alertMsg'] = request.session.pop('alertMsg')
-    except:
-        pass
+    context = saveAlert(context, request)
     return render(request, 'user/update.html', context)

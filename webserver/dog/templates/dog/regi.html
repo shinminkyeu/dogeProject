@@ -1,37 +1,6 @@
-<!-- 강아지 등록 페이지 -->
-<!DOCTYPE html>
-<html>
+{% extends 'layout.html' %}
 
-<head>
-	<title> Dog Register Page </title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<style>
-	</style>
-</head>
-<body>
-	<!-- Navbar (fixed on top) 내비게이션 바 (위쪽에 고정) -->
-	<div class="w3-top">
-		<div class="w3-bar w3-white w3-wide w3-padding w3-card">
-			<a href="../../trade/main" class="w3-bar-item w3-button">
-				<b>Doge</b>
-				gram
-			</a>
-			<!-- Float links to the right. -->
-			<div class="w3-right w3-hide-small">
-				<a href="find_page.html" class="w3-bar-item w3-button"> Find </a>
-				<a href="#user_page.html" class="w3-bar-item w3-button"> User </a>
-				<a href="#register_page.html" class="w3-bar-item w3-button"> Register </a>
-				<a href="#rehome_page.html" class="w3-bar-item w3-button"> Rehome </a>
-			</div>
-		</div>
-	</div>
-	<br><br>
+{% block content %}
 	<!-- Register a dog Section (강아지 등록) -->
 	<div class="w3-container w3-padding-32" id="Register">
 		<h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"> Register a dog </h3><br>
@@ -97,33 +66,30 @@
 			</button>
 		</form>
 		<hr>
-		<br><br>
-		<script type="text/javascript"
-			src="https://s3.ap-northeast-2.amazonaws.com/dogeproject/resources/js/dog_web3.js"></script>
-		<script>
-			function registerDog() {
-				console.log(typeof $('#dogGender').val());
-				reg_dog($('#dogBirth').val(), $('#dogBreed').val(), $('#dogGender').val(),
-					true, $('#regiNo').val(), $('#RFID').val(), $('#dogDad').val(), $('#dogMom').val(), "dogId");
-			}
+	</div>
+	<script>
+		function registerDog() {
+			console.log(typeof $('#dogGender').val());
+			reg_dog($('#dogBirth').val(), $('#dogBreed').val(), $('#dogGender').val(),
+				true, $('#regiNo').val(), $('#RFID').val(), $('#dogDad').val(), $('#dogMom').val(), "dogId");
+		}
 
-			function reg_dog(_birth, _kind, _gender, _alive, _regiNo, _rfid, _dadId, _momId, _inputId) {
-				let birth = (new Date(_birth).getTime() / 1000) - (3600 * 9)
-				let gender = _gender == 0 ? false : true;
-				contract.registerDog.sendTransaction(birth, _kind, gender, _alive, _regiNo, _rfid, _dadId, _momId,
-					(err, res) => {
-						if (err) console.log(err);
-						contract.newDog({}, (err2, eve) => {
-							if (err2) console.log(err2);
-							if (eve.args.owner === web3.eth.accounts[0]) {
-								//find_dog(eve.args.dogId.toNumber());
-								$('#' + _inputId).val(eve.args.dogId.toNumber());
-								$('#form1').submit();
-							}
-						});
-					}
-				);
-			}
-		</script>
-</body>
-</html>
+		function reg_dog(_birth, _kind, _gender, _alive, _regiNo, _rfid, _dadId, _momId, _inputId) {
+			let birth = (new Date(_birth).getTime() / 1000) - (3600 * 9)
+			let gender = _gender == 0 ? false : true;
+			contract.registerDog.sendTransaction(birth, _kind, gender, _alive, _regiNo, _rfid, _dadId, _momId,
+				(err, res) => {
+					if (err) console.log(err);
+					contract.newDog({}, (err2, eve) => {
+						if (err2) console.log(err2);
+						if (eve.args.owner === web3.eth.accounts[0]) {
+							//find_dog(eve.args.dogId.toNumber());
+							$('#' + _inputId).val(eve.args.dogId.toNumber());
+							$('#form1').submit();
+						}
+					});
+				}
+			);
+		}
+	</script>
+{% endblock %}
