@@ -70,6 +70,7 @@ contract DistributeContract is DogApp {
     function completeTrade(uint _tradeId) public onlyTradeOwner(_tradeId){
         require(trade[_tradeId].state == STATE.READY, "예약상태가 아닙니다.");
         trade[_tradeId].state = STATE.COMPLETION;
+        buyerTrade[trade[_tradeId].buyer].push(_tradeId);
         distributeDog(trade[_tradeId].dogId, trade[_tradeId].buyer);
     }
     //거래 취소하는 함수.
