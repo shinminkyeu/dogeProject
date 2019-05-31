@@ -52,7 +52,7 @@
         <!-- Float links to the right. -->
             <div class="w3-right w3-small">	
                 <a href="#;" id="doge-user" class="btn btn-info" role="button" onclick="document.account.submit()">User</a>
-                <form name = 'account' method = 'POST' action = "{% url 'user:info' %}">
+                <form name = 'account' method = 'POST' action = "{% url 'user:verify' %}">
                 {% csrf_token %}
                 </form>
             </div> 

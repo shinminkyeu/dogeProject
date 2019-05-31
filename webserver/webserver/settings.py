@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'dog.apps.DogConfig',
     'trade.apps.TradeConfig',
     'user.apps.UserConfig',
-    'w3Conn.apps.W3ConnConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

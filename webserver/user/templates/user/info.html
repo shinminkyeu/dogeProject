@@ -1,46 +1,30 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    {% if requireSign %}
-        {% include 'sign.html' %}
-        <form method = 'POST'>
-            {% csrf_token %}
-            <input type = 'hidden' name = 'address' value = '{{ requireSign }}'>
-            <input type = 'hidden' name = 'sigData' id = 'sigData'>
-        </form>
-        <script>
-            $(document).ready(() => {
-                $('#doge-user').remove()
-                $('form[name=account]').remove();
-                sign();
-            });
-        </script>
-    {% else %}
-        <div>
-            <p>
-                {{ User.user_name }}
-            </p>
-            <p>
-                {{User.user_region}}
-            </p>
-            {% if owner %}
-                <p>
-                    {{ User.user_contact }}
-                </p>
-                <script>
-                    $(document).ready(() => {
-                        $('#doge-user').attr('href', "{% url 'user:logout' %}").text('Logout').off('click');
-                        $('form[name=account]').remove();
-                        $('#editInfo').attr('href', "{% url 'user:update' %}")
-                    });
-                </script>
+    <div>
         <p>
-            <a id="editInfo" class="btn btn-light pull-right" role="button">정보 수정</a>
+            {{ User.user_name }}
         </p>
-            {% endif %}
-        </div>
-        <div>
-            {{Dogs}}
-        </div>
-    {% endif %}
+        <p>
+            {{User.user_region}}
+        </p>
+        {% if owner %}
+            <p>
+                {{ User.user_contact }}
+            </p>
+            <script>
+                $(document).ready(() => {
+                    $('#doge-user').attr('href', "{% url 'user:logout' %}").text('Logout').off('click');
+                    $('form[name=account]').remove();
+                    $('#editInfo').attr('href', "{% url 'user:update' %}")
+                });
+            </script>
+    <p>
+        <a id="editInfo" class="btn btn-light pull-right" role="button">정보 수정</a>
+    </p>
+        {% endif %}
+    </div>
+    <div>
+        {{Dogs}}
+    </div>
 {% endblock %}

@@ -8,8 +8,7 @@ from contract import contract, checkSign
 from dog.models import Dog, Picture
 from dog.views import getBreed
 
-# Create your views here.
-def info(request):
+def verify(request):
     if request.method == 'POST':
         # 서명 데이터가 넘어왔을 경우. (모든 과정 처리 후 세션에 임시로 저장된 주소 삭제)
         try:
@@ -30,17 +29,16 @@ def info(request):
                 User.objects.get(pk = request.POST['address'])
                 if request.session['account'] == request.POST['address']:
                     # 지갑 인증이 성공한 경우의 context 작성
-                    return redirect('user:view', request.session['account'])
+                    return redirect('user:info', request.session['account'])
                 else:
                     raise KeyError
             # account 세션이 없거나 넘어온 주소와 일치하지 않으면 서명페이지로 이동.
             except KeyError:
                 request.session['address'] = request.POST['address']
-                print(request.session['address'])
                 context = {
-                    'requireSign': request.session['address']
+                    'address': request.session['address']
                 }
-                return render(request, 'user/info.html', context)
+                return render(request, 'user/verify.html', context)
             # DB에 유저가 없을 경우 정보 등록 페이지로 이동
             except User.DoesNotExist:
                 request.session['address'] = request.POST['address']
@@ -51,7 +49,7 @@ def info(request):
         request.session['alertMsg'] = '잘못된 접근입니다'
         return redirect('trade:index')
 
-def view(request, user_addr):
+def info(request, user_addr):
     current_user = get_object_or_404(User, pk = user_addr)
     context = { 'User': current_user }
     if hash(user_addr) == hash(request.session.get('account')):
@@ -134,10 +132,10 @@ def update(request):
                 modUser.user_address = request.session['account']
                 modUser.save()
                 request.session['alertMsg'] = '정보를 업데이트 했습니다.'
-                return redirect('user:info')
+                return redirect('user:info', request.session['account'])
             else:
                 request.session['alertMsg'] = '유효하지 않은 서명입니다.'
-                return redirect('trade:index')
+                return redirect('trade:index') 
         else:
             print('안밸리드함')
             request.session['alertMsg'] = '알맞은 정보를 등록해 주세요.'
