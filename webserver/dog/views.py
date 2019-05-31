@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.db import models
 from django.utils import timezone
 from .models import Picture, Dog, Breed
+from trade.models import RegionTable
 from .templates import *
 from contract import *
 s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
@@ -27,7 +28,13 @@ def info(request):
         pass
     else:
         dogDapp, dogDB, dogPicture = findDog(16)
-    return render(request, 'dog/info.html')
+        context = {
+            'dogDapp' : dogDapp,
+            'dogDB' :   dogDB,
+            'dogPicture'    : dogPicture,
+            'address'   :   RegionTable.objects.all()
+        }
+    return render(request, 'dog/info.html', context)
 
 
 def findMyDogs(_address):
