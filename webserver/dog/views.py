@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
 from django.utils import timezone
 from .models import Picture, Dog, Breed
@@ -36,11 +36,11 @@ def register(request) :
         }
         return render(request, 'dog/regi.html', context)
 
-def info(request):
+def info(request, dog_id):
     if request.method == 'POST':
         pass
     else:
-        dogDapp, dogDB, dogPicture = findDog(16)
+        dogDapp, dogDB, dogPicture = findDog(dog_id)
         context = {
             'dogDapp' : dogDapp,
             'dogDB' :   dogDB,
@@ -91,7 +91,7 @@ def _findDogInDapp(_dogId):
     return _dogObject
 
 def _findDogInDB(_dogId):
-    dogInfo = Dog.objects.get(dog_id = _dogId)
+    dogInfo = get_object_or_404(Dog, pk = _dogId)
     dogPoto = Picture.objects.filter(dog = dogInfo)
     dogPotos = []
     for each in dogPoto:

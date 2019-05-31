@@ -156,6 +156,5 @@ def update(request):
         'address': request.session['account'],
         'form': form.as_p()
     }
-    # alertMsg가 넘어올 경우 메시지 제공.
     context = saveAlert(context, request)
     return render(request, 'user/update.html', context)
