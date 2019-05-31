@@ -17,7 +17,7 @@
                 $('#sigData').val(res.result);
                 $('form').submit();
             } else {
-                alert('지갑을 인증하지 않으면 서비스를 이용할 수 없습니다!');
+                alert('지갑을 인증하지 않으면 서비스를 이용할 수 없습니다!\n(서명할 수 없는 문제가 지속적으로 발생하면 브라우저를 재시작해 주세요.)');
                 location.href = "{% url 'trade:index' %}";
             }
         });
