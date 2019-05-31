@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% include 'sign.html' %}
+    <form method = 'POST'>
+        {% csrf_token %}
+        <input type = 'hidden' name = 'address' value = '{{ address }}'>
+        <input type = 'hidden' name = 'sigData' id = 'sigData'>
+    </form>
+    <script>
+        $(document).ready(() => {
+            $('#doge-user').remove()
+            $('form[name=account]').remove();
+            sign();
+        });
+    </script>
+{% endblock %}
