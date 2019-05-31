@@ -6,7 +6,9 @@ from .models import User
 from .forms import UserForm
 from contract import contract, checkSign
 from dog.models import Dog, Picture
-from dog.views import getBreed
+from dog.views import getBreed, s3_dogImage_Path
+
+
 
 # alertMsg가 넘어올 경우 메시지를 제공하는 함수.
 def saveAlert(context, request):
@@ -67,8 +69,14 @@ def info(request, user_addr):
         for id in dog_ids:
             dog = Dog.objects.get(pk = id)
             dog_dict = { 'name': dog.dog_name }
-            if dog.dog_picture_represented:
-                dog_object['picture'] = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"+Picture.objects.get(pk = dog.dog_picture_represented).picture_url
+            dog_pictures = Picture.objects.filter(dog = id)
+            if dog.dog_picture_represented == 0:
+                if dog.dog_picture_counter:
+                    dog_picture_path = dog_pictures[0]
+            else:
+                dog_picture_path = dog_pictures[dog.dog_picture_represented - 1]
+                if dog_picture_path:
+                    dog_dict['picture'] = s3_dogImage_Path + dog_picture_path
             dogs.append(dog_dict)
         context['Dogs'] = dogs
     context = saveAlert(context, request)

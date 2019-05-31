@@ -16,11 +16,11 @@
                 $(document).ready(() => {
                     $('#doge-user').attr('href', "{% url 'user:logout' %}").text('Logout').off('click');
                     $('form[name=account]').remove();
-                    $('#editInfo').attr('href', "{% url 'user:update' %}")
                 });
             </script>
     <p>
-        <a id="editInfo" class="btn btn-light pull-right" role="button">정보 수정</a>
+        <a href="{% url 'user:update' %}" class="btn btn-light pull-right" role="button">정보 수정</a>
+        <a href="{% url 'dog:register' %}" class="btn btn-light pull-right" role="button">강아지 등록</a>
     </p>
         {% endif %}
     </div>
