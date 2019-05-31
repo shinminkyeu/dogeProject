@@ -9,7 +9,7 @@ s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
 
 def _register(dog, images, account):
     event_filter = contract.events.newDog.createFilter(fromBlock='latest', argument_filters={'owner': account})
-    print(event_filter)
+    print(event_filter, end = " : ")
     print(event_filter.get_all_entries())
 
 def register(request) :
@@ -19,7 +19,8 @@ def register(request) :
         #dog = Dog.objects.create(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
         images = request.FILES.getlist('dogImages')
         _register(dog, images, myAddress)
-        return redirect('user:info', myAddress)
+        return redirect(register)
+        #return redirect('user:info', myAddress)
         """
         dog = Dog.objects.create(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
         images = request.FILES.getlist('dogImages')
