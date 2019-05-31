@@ -68,7 +68,7 @@ def info(request, user_addr):
             dog = Dog.objects.get(pk = id)
             dog_dict = { 'name': dog.dog_name }
             if dog.dog_picture_represented:
-                dog_object['picture'] = Picture.objects.get(pk = dog.dog_picture_represented)
+                dog_object['picture'] = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"+Picture.objects.get(pk = dog.dog_picture_represented).picture_url
             dogs.append(dog_dict)
         context['Dogs'] = dogs
     context = saveAlert(context, request)
