@@ -18,6 +18,10 @@ def saveAlert(context, request):
         pass
     return context
 
+# form 제출시 서명을 체크하는 함수
+def checkUserForm(userform, request):
+    pass
+
 def verify(request):
     if request.method == 'POST':
         # 서명 데이터가 넘어왔을 경우. (모든 과정 처리 후 세션에 임시로 저장된 주소 삭제)
@@ -149,7 +153,6 @@ def update(request):
                 request.session['alertMsg'] = '유효하지 않은 서명입니다.'
                 return redirect('trade:index') 
         else:
-            print('안밸리드함')
             request.session['alertMsg'] = '알맞은 정보를 등록해 주세요.'
     # GET 방식으로 접근할 경우.
     else:
