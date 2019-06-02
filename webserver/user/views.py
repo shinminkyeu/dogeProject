@@ -25,7 +25,7 @@ def isSignedForm(form, address):
         return True
     return False
 
-# UserForm을 저장하는 함수. save를 오버라이드 하고 싶었다.
+# UserForm을 저장하는 함수. 원래는 save를 오버라이드 하고 싶었다.
 def saveUserForm(userForm, address):
     userModel = userForm.save(commit = False)
     userModel.user_address = address
@@ -47,17 +47,19 @@ def getThumbnailOfDog(dog_id):
 # 개 여러 마리의 thumbnail을 thumbnail dict의 list 형태로 반환.
 def findDogsByOwner(address):
     dog_ids = contract.functions.showOwnerToDog(Web3.toChecksumAddress(address)).call()
-    thumbnail_of_dogs = []
+    owned_dogs = []
     for dog_id in dog_ids:
-        dogs.append(getThumbnailOfDog(dog_id))
-    return thumbnail_of_dogs
+        owned_dogs.append(getThumbnailOfDog(dog_id))
+    return owned_dogs
 
 # 거래의 날짜, 제목, 상태 리스트를 번환.
 def findTradesByOwner(address):
-    ownedTrades = []
+    
+    owned_trades = []
+
 
 def findTradesByBuyer(address):
-    pass
+    bought_trades = []
 
 # 로그인 상태를 확인하고, 없으면 서명을 요구하는 함수.
 def verify(request):
