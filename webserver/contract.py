@@ -16,7 +16,7 @@ def checkSign(signTypedData: str, address: str) -> bool:
             bytes.fromhex(signTypedData[66:130]),
             int(signTypedData[130:], 16)
         ).call()
-    return sign == Web3.toChecksumAddress(address)
+    return sign == address
 
 def getTradeState(trade_id):
     state_index = 2

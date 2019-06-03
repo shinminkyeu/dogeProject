@@ -4,9 +4,28 @@ from web3 import Web3
 
 from .models import User
 from .forms import UserForm
-from contract import checkSign
-from resources import *
+from dog.models import getThumbnailOfDog
+from trade.models import getThumbnailOfTrade
+from contract import contract, checkSign
+from resources import saveAlert, isSignedForm
 
+# 썸네일을 가져오는 함수.
+def getThumbnailsFromAddress(address):
+    ownerToDog = []
+    for dog_id in contract.functions.showOwnerToDog(address).call():
+        ownerToDog.append(getThumbnailOfDog(dog_id))
+    ownerTrade = []
+    for trade_id in contract.functions.showOwnerTrade(address).call():
+        ownerTrade.append(getThumbnailOfTrade(trade_id))
+    buyerTrade = []
+    for trade_id in contract.functions.showBuyerTrade(address).call():
+        buyerTrade.append(getThumbnailOfTrade(trade_id))
+    thumbnails = {
+        'ownerToDog': ownerToDog,
+        'ownerTrade': ownerTrade,
+        'buyerTrade': buyerTrade
+    }
+    return thumbnails
 
 # UserForm을 저장하는 함수. 원래는 save를 오버라이드 하고 싶었다.
 def saveUserForm(userForm, address):
@@ -30,7 +49,7 @@ def verify(request):
         # 주소 데이터가 넘어왔을 경우
         except KeyError:
             try:
-                address = request.POST['address']
+                address = Web3.toChecksumAddress(request.POST['address'])
                 # DB에 유저가 없으면 User.DoesNotExist 예외 발생.
                 User.objects.get(pk = address)
                 if request.session['account'] == address:
@@ -56,22 +75,15 @@ def verify(request):
         return redirect('trade:index')
 
 def info(request, user_addr):
-    context = { 'User': get_object_or_404(User, pk = user_addr) }
+    context = {
+        'User': get_object_or_404(User, pk = user_addr),
+        'Thumbnails': getThumbnailsFromAddress(user_addr)
+    }
     if hash(user_addr) == hash(request.session.get('account')):
         context['owner'] = True
-    ownerToDogs = getThumbnails('ownerToDog', user_addr)
-    if ownerToDogs:
-        context['ownerToDogs'] = ownerToDogs
-    ownerTrades = getThumbnails('ownerTrade', user_addr)
-    if ownerTrades:
-        context['ownerTrades'] = ownerTrades
-    buyerTrades = getThumbnails('buyerTrade', user_addr)
-    if buyerTrades:
-        context['buyerTrades'] = buyerTrades
     context = saveAlert(context, request)
     return render(request, 'user/info.html', context)
     
-
 def logout(request):
     request.session.clear()
     request.session['alertMsg'] = '로그아웃 되었습니다.'

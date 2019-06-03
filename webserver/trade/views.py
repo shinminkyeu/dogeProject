@@ -14,13 +14,30 @@ class searchForm(forms.Form):
     ageEnd = forms.IntegerField(min_value = 0)
     gender = forms.TypedChoiceField(choices = gender_choice, coerce = bool)
 
-
+def getThumbnailFromWaitingTrades():
+    trade_ids = contract.functions.showWaitingTrade().call()
+    dog_id_index = 0
+    owner_id_index = 3
+    thumbnails = []
+    for trade_id in trade_ids:
+        trade_in_contract = contract.functions.showTrade(trade_id).call()
+        dog_id = trade_in_contract[dog_id_index]
+        owner_id = trade_in_contract[owner_id_index]
+        trade_thumbnail = {
+            'title': Trade.objects.get(pk = trade_id).trade_title,
+            'region': User.objects.get(pk = owner_id).user_region
+        }
+        tradeThumbnailImage = getTradeThumbnailImage(trade_id, dog_id)
+        if tradeThumbnailImage:
+            trade_thumbnail['image'] = tradeThumbnailImage
+        thumbnails.append(trade_thumbnail)
+    return thumbnails
 
 def index(request):
     context = {
         # 사이드 컨텍스트 메뉴에 들어갈 콘텐츠
     }
-    waitingTrades = getWaitingTrades()
+    waitingTrades = getThumbnailFromWaitingTrades()
     if waitingTrades:
         context['waitingTrades'] = waitingTrades
     saveAlert(context, request)
