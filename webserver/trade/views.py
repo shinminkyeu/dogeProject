@@ -5,7 +5,6 @@ from django import forms
 from contract import contract, checkSign
 from .models import *
 from dog.models import *
-from dog.views import getBreed
 
 # Create your views here.
 class searchForm(forms.Form):

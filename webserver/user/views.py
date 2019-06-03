@@ -4,62 +4,15 @@ from web3 import Web3
 
 from .models import User
 from .forms import UserForm
-from contract import contract, checkSign
-from dog.models import Dog, Picture
-from dog.views import getBreed, s3_dogImage_Path
+from contract import checkSign
+from resources import *
 
-
-
-# alertMsg가 넘어올 경우 메시지를 제공하는 함수.
-def saveAlert(context, request):
-    try:
-        context['alertMsg'] = request.session.pop('alertMsg')
-    except:
-        pass
-    return context
-
-# form의 서명을 확인하는 함수.
-def isSignedForm(form, address):
-    if checkSign(form.cleaned_data['sigData'], address):
-        del form.fields['sigData']
-        return True
-    return False
 
 # UserForm을 저장하는 함수. 원래는 save를 오버라이드 하고 싶었다.
 def saveUserForm(userForm, address):
     userModel = userForm.save(commit = False)
     userModel.user_address = address
     userModel.save()
-
-# 개 한 마리의 thumbnail을 이름과 대표사진의 dict로 반환하는 함수.
-def getThumbnailOfDog(dog_id):
-    dog = Dog.objects.get(pk = dog_id)
-    dog_thumbnail = { 'name': dog.dog_name }
-    dog_pictures = Picture.objects.filter(dog = dog_id)
-    if dog_pictures.exists():
-        if dog.dog_picture_represented:
-            dog_picture_path = dog_pictures[dog.dog_picture_represented - 1].picture_url
-        else:
-            dog_picture_path = dog_pictures[0].picture_url
-        dog_thumbnail['picture'] = s3_dogImage_Path + dog_picture_path
-    return dog_thumbnail
-
-# 개 여러 마리의 thumbnail을 thumbnail dict의 list 형태로 반환.
-def findDogsByOwner(address):
-    dog_ids = contract.functions.showOwnerToDog(Web3.toChecksumAddress(address)).call()
-    owned_dogs = []
-    for dog_id in dog_ids:
-        owned_dogs.append(getThumbnailOfDog(dog_id))
-    return owned_dogs
-
-# 거래의 날짜, 제목, 상태 리스트를 번환.
-def findTradesByOwner(address):
-    
-    owned_trades = []
-
-
-def findTradesByBuyer(address):
-    bought_trades = []
 
 # 로그인 상태를 확인하고, 없으면 서명을 요구하는 함수.
 def verify(request):
@@ -103,13 +56,19 @@ def verify(request):
         return redirect('trade:index')
 
 def info(request, user_addr):
-    current_user = get_object_or_404(User, pk = user_addr)
-    context = { 'User': current_user }
+    currentUser = get_object_or_404(User, pk = user_addr)
+    context = { 'User': currentUser }
     if hash(user_addr) == hash(request.session.get('account')):
         context['owner'] = True
-    thumbnail_of_dogs = findDogsByOwner(user_addr)
-    if thumbnail_of_dogs:
-        context['Dogs'] = thumbnail_of_dogs
+    ownerToDogs = getThumbnails('ownerToDog', user_addr)
+    if ownerToDogs:
+        context['ownerToDogs'] = ownerToDogs
+    ownerTrades = getThumbnails('ownerTrade', user_addr)
+    if ownerTrades:
+        context['ownerTrades'] = ownerTrades
+    buyerTrades = getThumbnails('buyerTrade', user_addr)
+    if buyerTrades:
+        context['buyerTrades'] = buyerTrades
     context = saveAlert(context, request)
     return render(request, 'user/info.html', context)
     

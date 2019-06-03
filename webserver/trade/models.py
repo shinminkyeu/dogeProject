@@ -24,7 +24,7 @@ class Trade(models.Model):
     # 분양 이미지의 일련번호
     trade_img_counter = models.PositiveSmallIntegerField(default = 0)
     # 분양글 게시 날짜
-    trade_apply_time = models.DateTimeField(default = timezone.now)
+    trade_offered_time = models.DateTimeField(default = timezone.now)
 
 # 거래 이미지 테이블.
 class TradeImage(models.Model):
@@ -38,3 +38,12 @@ class RegionTable(models.Model):
     stepTwo = models.CharField(max_length = 10)
     def __str__(self):
         return self.stepOne + ' - ' + self.stepTwo
+
+def getThumbnailOfTrade(trade_id):
+    trade = Trade.objects.get(pk = trade_id)
+    trade_thumbnail = {
+        'date': Trade.trade_offered_time,
+        'title': Trade.trade_title,
+        'state': getTradeState(trade_id)
+    }
+    return trade_thumbnail

@@ -18,6 +18,10 @@ def checkSign(signTypedData: str, address: str) -> bool:
         ).call()
     return sign == Web3.toChecksumAddress(address)
 
+def getTradeState(trade_id):
+    state = ['분양 중', '예약 중', '완료됨', '취소됨']
+    return state[contract.functions.showTrade(trade_id).call()[2]]
+
 # def watingTradeList(
 # ageStart = 0: int,
 # ageEnd = sys.maxint: int,

@@ -37,3 +37,33 @@ class Picture(models.Model):
 class Breed(models.Model):
     breed_kind = models.CharField(max_length=100)
     breed_size = models.PositiveSmallIntegerField()
+
+def getBreed(_size=10):
+    rVal = []
+    breeds = Breed.objects.all()
+    for each in breeds:  #0:소형견, 1:중형견, 2:대형견
+        if _size == 0:
+            if each.breed_size == 0:
+                rVal.append([each.id, each.breed_kind, each.breed_size])
+        elif _size == 1:
+            if each.breed_size == 1:
+                rVal.append([each.id, each.breed_kind, each.breed_size])
+        elif _size == 2:
+            if each.breed_size == 2:
+                rVal.append([each.id, each.breed_kind, each.breed_size])
+        else:
+            rVal.append([each.id, each.breed_kind, each.breed_size])
+    return rVal
+
+# 개 한 마리의 thumbnail을 이름과 대표사진의 dict로 반환하는 함수.
+def getThumbnailOfDog(dog_id):
+    dog = Dog.objects.get(pk = dog_id)
+    dog_thumbnail = { 'name': dog.dog_name }
+    dog_pictures = Picture.objects.filter(dog = dog_id)
+    if dog_pictures.exists():
+        if dog.dog_picture_represented:
+            dog_picture_path = dog_pictures[dog.dog_picture_represented - 1].picture_url
+        else:
+            dog_picture_path = dog_pictures[0].picture_url
+        dog_thumbnail['picture'] = s3_Path + dog_picture_path
+    return dog_thumbnail

@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
 from django.utils import timezone
+
 from .models import Picture, Dog, Breed
 from trade.models import RegionTable
-from .templates import *
 from contract import *
-s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
+from resources import *
 
 def _register(dog, images, account):
     event_filter = contract.events.newDog.createFilter(fromBlock='latest', argument_filters={'owner': account})
@@ -97,23 +97,8 @@ def _findDogInDB(_dogId):
     dogPotos = []
     for each in dogPoto:
         temp = ""
-        temp = s3_dogImage_Path+str(each.picture_url)
+        temp = s3_Path+str(each.picture_url)
         dogPotos.append(temp)
     return dogInfo, dogPotos
 
-def getBreed(_size=10):
-    rVal = []
-    breeds = Breed.objects.all()
-    for each in breeds:  #0:소형견, 1:중형견, 2:대형견
-        if _size == 0:
-            if each.breed_size == 0:
-                rVal.append([each.id, each.breed_kind, each.breed_size])
-        elif _size == 1:
-            if each.breed_size == 1:
-                rVal.append([each.id, each.breed_kind, each.breed_size])
-        elif _size == 2:
-            if each.breed_size == 2:
-                rVal.append([each.id, each.breed_kind, each.breed_size])
-        else:
-            rVal.append([each.id, each.breed_kind, each.breed_size])
-    return rVal
+
