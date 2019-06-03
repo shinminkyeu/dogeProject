@@ -1,7 +1,7 @@
 from contract import *
-from dog.models import getThumbnailOfDog
-from trade.models import getThumbnailOfTrade
-from user.models import getThumbnailOfUser
+from dog.models import *
+from trade.models import *
+from user.models import *
 
 s3_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
 
@@ -20,15 +20,14 @@ def isSignedForm(form, address):
         return True
     return False
 
-def getThumbnails(kind, address):
+def getThumbnails(kind, key):
     getFromContract = {
         'dogToOwner': contract.functions.showdogToOwner,
         'ownerToDog': contract.functions.showOwnerToDog,
         'childToParent': contract.functions.showChildToParent,
         'parentToChildren': contract.functions.showParentToChildren,
-        'onwerTrade': contract.functions.showOwnerTrade,
+        'ownerTrade': contract.functions.showOwnerTrade,
         'buyerTrade': contract.functions.showBuyerTrade,
-        'waitingTrade': contract.functions.showWaitingTrade
     }
     getFromDB = {
         'dogToOwner': getThumbnailOfUser,
@@ -37,10 +36,12 @@ def getThumbnails(kind, address):
         'parentToChildren': getThumbnailOfDog,
         'ownerTrade': getThumbnailOfTrade,
         'buyerTrade': getThumbnailOfTrade,
-        'waitingTrade': getThumbnailOfTrade
     }
-    shown_ids = getFromContract.get(kind)(Web3.toChecksumAddress(address)).call()
+    if kind in ['ownerToDog', 'ownerTrade', 'buyerTrade']:
+        key = Web3.toChecksumAddress(key)
+    shown_ids = getFromContract.get(kind)(key).call()
     thumbnails = []
     for each in shown_ids:
         thumbnails.append(getFromDB.get(kind)(each))
     return thumbnails
+

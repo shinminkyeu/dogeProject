@@ -56,8 +56,7 @@ def verify(request):
         return redirect('trade:index')
 
 def info(request, user_addr):
-    currentUser = get_object_or_404(User, pk = user_addr)
-    context = { 'User': currentUser }
+    context = { 'User': get_object_or_404(User, pk = user_addr) }
     if hash(user_addr) == hash(request.session.get('account')):
         context['owner'] = True
     ownerToDogs = getThumbnails('ownerToDog', user_addr)
@@ -121,6 +120,7 @@ def update(request):
         if form.is_valid():
             # 서명 확인
             if isSignedForm(form, request.session['account']):
+                print(form)
                 saveUserForm(form, request.session['account'])
                 request.session['alertMsg'] = '정보를 업데이트 했습니다.'
                 return redirect('user:info', request.session['account'])

@@ -1,7 +1,8 @@
 import datetime
 import re
-
 from django.db import models
+
+from resources import s3_Path
 
 # 개의 사진에 대한 이름 정책. (개 id/사진 일련번호.확장자)
 def pic_name_policy(instance, filename):
@@ -59,11 +60,18 @@ def getBreed(_size=10):
 def getThumbnailOfDog(dog_id):
     dog = Dog.objects.get(pk = dog_id)
     dog_thumbnail = { 'name': dog.dog_name }
-    dog_pictures = Picture.objects.filter(dog = dog_id)
-    if dog_pictures.exists():
-        if dog.dog_picture_represented:
-            dog_picture_path = dog_pictures[dog.dog_picture_represented - 1].picture_url
-        else:
-            dog_picture_path = dog_pictures[0].picture_url
-        dog_thumbnail['picture'] = s3_Path + dog_picture_path
+    dog_picture_path = getRepresentedPictureOfDog(dog)
+    if dog_picture_path:
+        dog_thumbnail['picture'] = dog_picture_path
     return dog_thumbnail
+
+def getRepresentedPictureOfDog(current_dog):
+    dog_pictures = Picture.objects.filter(dog = current_dog.dog_id)
+    dog_picture_path = ''
+    if dog_pictures.exists():
+        dog_picture_path = s3_Path
+        if current_dog.dog_picture_represented:
+            dog_picture_path += dog_pictures[current_dog.dog_picture_represented - 1].picture_url
+        else:
+            dog_picture_path += dog_pictures[0].picture_url
+    return dog_picture_path

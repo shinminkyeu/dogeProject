@@ -1,6 +1,11 @@
 from django.db import models
 from django.utils import timezone
 
+from contract import contract, getTradeState
+from resource import s3_Path
+from dog.models import Dog, getRepresentedPictureOfDog
+from user.models import User
+
 # 거래 이미지에 대한 이름 정책 (거래 id/이미지 일련번호.확장자)
 def img_name_policy(instance, filename):
     instance.trade.trade_img_counter += 1
@@ -41,9 +46,44 @@ class RegionTable(models.Model):
 
 def getThumbnailOfTrade(trade_id):
     trade = Trade.objects.get(pk = trade_id)
+    dog_id = contract.functions.showTrade(trade_id).call()[0]
     trade_thumbnail = {
         'date': Trade.trade_offered_time,
         'title': Trade.trade_title,
         'state': getTradeState(trade_id)
     }
+    tradeThumbnailImage = getTradeThumbnailImage(trade_id, dog_id)
+    if tradeThumbnailImage:
+        trade_thumbnail['image'] = tradeThumbnailImage
     return trade_thumbnail
+
+def getWaitingTrades():
+    trade_ids = contract.functions.showWaitingTrade().call()
+    dog_id_index = 0
+    owner_id_index = 3
+    waitingTrades = []
+    for trade_id in trade_ids:
+        trade_in_contract = contract.functions.showTrade(trade_id).call()
+        dog_id = trade_in_contract[dog_id_index]
+        owner_id = trade_in_contract[owner_id_index]
+        trade_thumbnail = {
+            'title': Trade.objects.get(pk = trade_id).trade_title,
+            'region': User.objects.get(pk = owner_id).user_region
+        }
+        tradeThumbnailImage = getTradeThumbnailImage(trade_id, dog_id)
+        if tradeThumbnailImage:
+            trade_thumbnail['image'] = tradeThumbnailImage
+        waitingTrades.append(trade_thumbnail)
+    return waitingTrades
+
+def getTradeThumbnailImage(trade_id, dog_id):
+    result = ''
+    tradeImage = TradeImage.objects.filter(trade = trade_id)
+    dog = Dog.objects.get(pk = dog_id)
+    if tradeImage:
+        result = s3_Path + tradeImage[0]
+    else:
+        dog_picture = getRepresentedPictureOfDog(Dog.objects.get(pk = dog_id))
+        if dog_picture:
+            result = dog_picture
+    return result
