@@ -66,12 +66,14 @@ def getThumbnailOfDog(dog_id):
     return dog_thumbnail
 
 def getRepresentedPictureOfDog(current_dog):
-    dog_pictures = Picture.objects.filter(dog = current_dog.dog_id)
+    dog_id = current_dog.dog_id
+    represented_index = current_dog.dog_picture_represented
+    dog_pictures = Picture.objects.filter(dog = dog_id)
     dog_picture_path = ''
     if dog_pictures.exists():
         dog_picture_path = s3_Path
-        if current_dog.dog_picture_represented:
-            dog_picture_path += dog_pictures[current_dog.dog_picture_represented - 1].picture_url
+        if represented_index:
+            dog_picture_path += dog_pictures[represented_index - 1].picture_url
         else:
             dog_picture_path += dog_pictures[0].picture_url
     return dog_picture_path

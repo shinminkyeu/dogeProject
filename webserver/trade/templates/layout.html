@@ -28,7 +28,8 @@
         } else if (typeof web3 !== 'undefined') { // 구버전 메타마스크라면
             web3 = new Web3(web3.currentProvider); // 권한 요청 없이 실행
         } else {
-            // 메타마스크가 없으면 실행될 코드
+            alert('이더리움 지갑이 없으면 앱을 사용할 수 없습니다.\n가장 대중적인 지갑인 메타마스크를 써 보세요!')
+            location.href = 'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=ko'
         }
         // contract 객체 할당
         contract = web3.eth.contract(doge_ABI).at(contractAddress);

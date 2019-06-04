@@ -2,10 +2,31 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
 from django.utils import timezone
 
-from .models import Picture, Dog, Breed
+from .models import *
 from trade.models import RegionTable
+from user.models import User
 from contract import *
 from resources import *
+
+def getThumbnailsFromDogId(dog_id):
+    dogToOwner = []
+    for user_id in contract.functions.showDogToOwner(dog_id).call():
+        dogToOwner.append(User.objects.get(pk = user_id).user_name)
+    childToParent = {}
+    mom_id, dad_id = contract.functions.showChildToParent(dog_id).call()
+    if mom_id:
+        childToParent['mom'] = getThumbnailOfDog(mom_id)
+    if dad_id:
+        childToParent['dad'] = getThumbnailOfDog(dad_id)
+    parentToChildren = []
+    for child_id in contract.functions.showParentToChildren(dog_id).call():
+        parentToChildren.append(getThumbnailOfDog(child_id))
+    thumbnails = {
+        'dogToOwner': dogToOwner,
+        'childToParent': childToParent,
+        'parentToChildren': parentToChildren
+    }
+    return thumbnails
 
 def _register(dog, images, account):
     event_filter = contract.events.newDog.createFilter(fromBlock='latest', argument_filters={'owner': account})
