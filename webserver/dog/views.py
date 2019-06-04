@@ -27,6 +27,7 @@ def register(request) :
     if request.method == 'POST':
         import threading
         import tempfile
+        #세션 관리.
         myAddress = request.session.get('account', '0x6347fb458F79309657327F8F4Da647d21d9CF530')
         dog = Dog(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
         images = request.FILES.getlist('dogImages')
@@ -52,7 +53,6 @@ def info(request, dog_id):
             'address'   :   RegionTable.objects.all()
         }
     return render(request, 'dog/info.html', context)
-
 
 def findMyDogs(_address):
     mydogsId = contract.functions.showOwnerToDog(_address).call()
