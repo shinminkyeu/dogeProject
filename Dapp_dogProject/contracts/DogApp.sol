@@ -13,8 +13,10 @@ contract DogApp is DogContract {
         uint age = now - _birth;
         uint momId = _motherId;
         uint dadId = _fatherId;
-        require(dogs[momId].gender == true, "모견이 암컷이 아닙니다.");          //입력된 어미견의 성별이 암컷이 아니라면.
-        require(dogs[dadId].gender == false, "부견이 암컷이 아닙니다.");          //입력된 어미견의 성별이 암컷이 아니라면.
+        if(momId != 0){
+            require(dogs[momId].gender == true, "모견이 암컷이 아닙니다.");}          //입력된 어미견의 성별이 암컷이 아니라면.
+        if(dadId != 0){
+            require(dogs[dadId].gender == false, "부견이 암컷이 아닙니다.");}          //입력된 어미견의 성별이 암컷이 아니라면.
         require(dogs[dadId].birth < _birth, "아빠견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
         require(dogs[momId].birth < _birth, "엄마견이 자식견보다 어립니다.");   //부모견의 나이가 자식견보다 나이가 크지 않다면
         if(age < ageRestriction) {      //성견인지 아닌지 확인(6개월.)
