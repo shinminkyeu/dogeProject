@@ -2,7 +2,7 @@ from web3 import Web3
 import json
 import sys
 
-contractAddress = "0xb3da206021b55620ca77a75d71111e4710955d3d"
+contractAddress = "0xd4965421d40bed7d0de2b4ffa02fb118d3424195"
 with open('abi.json', 'r') as f:
     contract_abi = json.load(f)
 web3 = Web3(Web3.WebsocketProvider("wss://ropsten.infura.io/ws/v3/6de59f77f06e447a89d8fecdcbc9017d"))

@@ -1,38 +1,33 @@
 [
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
-				"name": "_dogId",
-				"type": "uint256"
+				"name": "message",
+				"type": "bytes"
 			},
 			{
-				"name": "_registerNo",
-				"type": "string"
-			}
-		],
-		"name": "addRegisterNumber",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_dogId",
-				"type": "uint256"
+				"name": "r",
+				"type": "bytes32"
 			},
 			{
-				"name": "_rfid",
-				"type": "string"
+				"name": "s",
+				"type": "bytes32"
+			},
+			{
+				"name": "v",
+				"type": "uint8"
 			}
 		],
-		"name": "addRFID",
-		"outputs": [],
+		"name": "checkSignature",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
@@ -53,11 +48,19 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_value",
-				"type": "uint8"
+				"name": "_dogId",
+				"type": "uint256"
+			},
+			{
+				"name": "_pDogId",
+				"type": "uint256"
+			},
+			{
+				"name": "_pDogOwner",
+				"type": "address"
 			}
 		],
-		"name": "changeKindCount",
+		"name": "registerParents",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -67,11 +70,15 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_tradeId",
+				"name": "_dogId",
 				"type": "uint256"
+			},
+			{
+				"name": "_alive",
+				"type": "bool"
 			}
 		],
-		"name": "completeTrade",
+		"name": "stateChangeDog",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -96,6 +103,213 @@
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [],
+		"name": "showWattingTrade",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "showOwnerToDog",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "showOwnerTrade",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_dogId",
+				"type": "uint256"
+			}
+		],
+		"name": "showDogTrade",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_value",
+				"type": "uint8"
+			}
+		],
+		"name": "changeKindCount",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_dogId",
+				"type": "uint32"
+			},
+			{
+				"name": "_price",
+				"type": "uint8"
+			},
+			{
+				"name": "_region",
+				"type": "string"
+			}
+		],
+		"name": "registerTrade",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_dogId",
+				"type": "uint256"
+			}
+		],
+		"name": "showParentToChildren",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_dogId",
+				"type": "uint256"
+			}
+		],
+		"name": "findDog",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint32"
+			},
+			{
+				"name": "",
+				"type": "uint8"
+			},
+			{
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_tradeId",
+				"type": "uint256"
+			},
+			{
+				"name": "_buyer",
+				"type": "address"
+			}
+		],
+		"name": "reserveTrade",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "showBuyerTrade",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -108,6 +322,68 @@
 			}
 		],
 		"name": "registerChildren",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "setDogs",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_tradeId",
+				"type": "uint256"
+			}
+		],
+		"name": "showTrade",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint32"
+			},
+			{
+				"name": "",
+				"type": "uint8"
+			},
+			{
+				"name": "",
+				"type": "uint8"
+			},
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_tradeId",
+				"type": "uint256"
+			}
+		],
+		"name": "completeTrade",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -156,79 +432,22 @@
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
-				"name": "_dogId",
-				"type": "uint256"
-			},
-			{
-				"name": "_pDogId",
-				"type": "uint256"
-			},
-			{
-				"name": "_pDogOwner",
-				"type": "address"
+				"name": "message",
+				"type": "bytes"
 			}
 		],
-		"name": "registerParents",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_dogId",
-				"type": "uint32"
-			},
-			{
-				"name": "_price",
-				"type": "uint8"
-			},
-			{
-				"name": "_region",
-				"type": "string"
-			}
-		],
-		"name": "registerTrade",
+		"name": "doHash",
 		"outputs": [
 			{
 				"name": "",
-				"type": "uint256"
+				"type": "bytes32"
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_tradeId",
-				"type": "uint256"
-			},
-			{
-				"name": "_buyer",
-				"type": "address"
-			}
-		],
-		"name": "reserveTrade",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "setDogs",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
@@ -239,11 +458,67 @@
 				"type": "uint256"
 			},
 			{
-				"name": "_alive",
-				"type": "bool"
+				"name": "_rfid",
+				"type": "string"
 			}
 		],
-		"name": "stateChangeDog",
+		"name": "addRFID",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_dogId",
+				"type": "uint256"
+			}
+		],
+		"name": "showDogToOwner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_dogId",
+				"type": "uint256"
+			}
+		],
+		"name": "showChildToParent",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256[2]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_dogId",
+				"type": "uint256"
+			},
+			{
+				"name": "_registerNo",
+				"type": "string"
+			}
+		],
+		"name": "addRegisterNumber",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -319,223 +594,5 @@
 		],
 		"name": "registeredParent",
 		"type": "event"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "message",
-				"type": "bytes"
-			},
-			{
-				"name": "r",
-				"type": "bytes32"
-			},
-			{
-				"name": "s",
-				"type": "bytes32"
-			},
-			{
-				"name": "v",
-				"type": "uint8"
-			}
-		],
-		"name": "checkSignature",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "pure",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "message",
-				"type": "bytes"
-			}
-		],
-		"name": "doHash",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"payable": false,
-		"stateMutability": "pure",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_dogId",
-				"type": "uint256"
-			}
-		],
-		"name": "findDog",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint32"
-			},
-			{
-				"name": "",
-				"type": "uint8"
-			},
-			{
-				"name": "",
-				"type": "bool"
-			},
-			{
-				"name": "",
-				"type": "bool"
-			},
-			{
-				"name": "",
-				"type": "string"
-			},
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_dogId",
-				"type": "uint256"
-			}
-		],
-		"name": "showChildToParent",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256[2]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_dogId",
-				"type": "uint256"
-			}
-		],
-		"name": "showDogToOwner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_user",
-				"type": "address"
-			}
-		],
-		"name": "showOwnerToDog",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_dogId",
-				"type": "uint256"
-			}
-		],
-		"name": "showParentToChildren",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_tradeId",
-				"type": "uint256"
-			}
-		],
-		"name": "showTrade",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint32"
-			},
-			{
-				"name": "",
-				"type": "uint8"
-			},
-			{
-				"name": "",
-				"type": "uint8"
-			},
-			{
-				"name": "",
-				"type": "address"
-			},
-			{
-				"name": "",
-				"type": "address"
-			},
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "showWattingTrade",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
 	}
 ]
