@@ -20,8 +20,7 @@ def _register(dog, images, account):
             dog.save()
             if images:
                 for each in images:
-                    #print(each)
-                    Picture.objects.create(dog = dog, picture_url = File(base64.b64decode(each),"ddddd.jpg"))
+                    Picture.objects.create(dog = dog, picture_url = each)
             break
 
 def register(request) :
@@ -30,23 +29,9 @@ def register(request) :
         import tempfile
         myAddress = request.session.get('account', '0x6347fb458F79309657327F8F4Da647d21d9CF530')
         dog = Dog(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
-        inputImages = request.FILES.getlist('dogImages')
-        images = []
-        for each in inputImages:
-            images.append(each.read())
-        regiDBThread = threading.Thread(target=_register, args=(dog,images,myAddress))
-        regiDBThread.start()
-         #_register(dog, images, myAddress)
-        return redirect('dog:register')
-        #return redirect('user:info', myAddress)
-        """
-        dog = Dog.objects.create(dog_id=request.POST.get("dogId"),dog_name=request.POST.get("dogName"),dog_coat_length=request.POST.get("coatLength"),dog_coat_color=request.POST.get("coatColor"))
         images = request.FILES.getlist('dogImages')
-        if images:
-            for each in images:
-                Picture.objects.create(dog=dog ,picture_url=each)
-        return redirect(register)
-        """
+        _register(dog, images, myAddress)
+        return redirect('user:info', myAddress)
     else :
         myAddress = request.session.get('account', '0x6347fb458F79309657327F8F4Da647d21d9CF530')
         context = {
