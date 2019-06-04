@@ -36,7 +36,7 @@ contract DistributeContract is DogApp {
         return(trade[_tradeId].dogId, trade[_tradeId].price, trade[_tradeId].state,trade[_tradeId].owner,
          trade[_tradeId].buyer, trade[_tradeId].region);
     }
-    function showWattingTrade() external view returns(uint[] memory){
+    function showWaittingTrade() external view returns(uint[] memory){
         uint[] memory rVal = new uint[](wattingCount);
         uint rIndex = 0;
         for(uint i = 0 ; i < trade.length ; i++) {
