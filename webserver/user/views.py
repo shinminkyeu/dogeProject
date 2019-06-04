@@ -49,7 +49,7 @@ def verify(request):
         # 주소 데이터가 넘어왔을 경우
         except KeyError:
             try:
-                address = Web3.toChecksumAddress(request.POST['address'])
+                address = Web3.toChecksumAddress(str(request.POST['address']))
                 # DB에 유저가 없으면 User.DoesNotExist 예외 발생.
                 User.objects.get(pk = address)
                 if request.session['account'] == address:

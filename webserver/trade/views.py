@@ -4,6 +4,7 @@ from django import forms
 
 from contract import contract
 from .models import *
+from user.models import User
 from resources import *
 
 # Create your views here.
@@ -15,7 +16,7 @@ class searchForm(forms.Form):
     gender = forms.TypedChoiceField(choices = gender_choice, coerce = bool)
 
 def getThumbnailFromWaitingTrades():
-    trade_ids = contract.functions.showWaitingTrade().call()
+    trade_ids = contract.functions.showWattingTrade().call()
     dog_id_index = 0
     owner_id_index = 3
     thumbnails = []
