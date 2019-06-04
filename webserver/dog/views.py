@@ -9,6 +9,7 @@ s3_dogImage_Path = "https://s3.ap-northeast-2.amazonaws.com/dogeproject/"
 
 def _register(dog, images, account):
     import json
+    from django.core.files import File
     from django.core.files.base import ContentFile
     import base64
     while True :
@@ -20,7 +21,7 @@ def _register(dog, images, account):
             if images:
                 for each in images:
                     #print(each)
-                    Picture.objects.create(dog = dog, picture_url = ContentFile(base64.b64decode(each)))
+                    Picture.objects.create(dog = dog, picture_url = File(base64.b64decode(each),"ddddd.jpg"))
             break
 
 def register(request) :
