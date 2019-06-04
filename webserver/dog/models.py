@@ -2,7 +2,7 @@ import datetime
 import re
 from django.db import models
 
-from resources import s3_Path
+from resources import *
 
 # 개의 사진에 대한 이름 정책. (개 id/사진 일련번호.확장자)
 def pic_name_policy(instance, filename):

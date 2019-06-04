@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from contract import contract, getTradeState
-from resource import s3_Path
+from resources import *
 from dog.models import Dog, getRepresentedPictureOfDog
 from user.models import User
 
@@ -83,7 +83,7 @@ def getTradeThumbnailImage(trade_id, dog_id):
     if tradeImage:
         result = s3_Path + tradeImage[0]
     else:
-        dog_picture = getRepresentedPictureOfDog(Dog.objects.get(pk = dog_id))
+        dog_picture = getRepresentedPictureOfDog(dog)
         if dog_picture:
             result = dog_picture
     return result
