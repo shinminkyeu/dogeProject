@@ -17,12 +17,6 @@
 <script>
     let contract;
     const contractAddress = "0xb3da206021b55620ca77a75d71111e4710955d3d";
-    const sigParams = [
-    {
-        type: 'string',
-        name: 'message',
-        value: '지갑을 인증해 주세요.\nPlease verify your wallet.'
-    }];
     $(document).ready(async () => {
         if (ethereum) { // 최신 메타마스크라면,
             const web3 = new Web3(ethereum);
@@ -38,19 +32,14 @@
         }
         // contract 객체 할당
         contract = web3.eth.contract(doge_ABI).at(contractAddress);
-        $('#doge-home').attr('href', location.hostname)
-        if (location.href == location.hostname + '/user') {
-            $('#doge-user').text('Logout')
-            .attr('href', location.hostname + '/logout')
-        } else {
-            $('<form name="account" method="post"></form>')
-            .attr('action', location.hostname + '/user')
-            .append('<input type="hidden" name="account" value='+web3.eth.accounts[0]+'>')
-            .insertAfter('#doge-user');
-            $('#doge-user').text('User')
-            .attr('href', '#;')
-            .click(document.account.submit());
-        }
+        // 홈버튼 할당
+        $('#doge-home').attr('href', '//' + location.hostname);
+        // 유저버튼 할당
+        $('form[name=account]')
+        .append('<input type="hidden" name="address" value='+web3.eth.accounts[0]+'>');
+        {% if alertMsg %}
+        alert('{{ alertMsg }}');
+        {% endif %}
     });
 </script>
 <body>
@@ -63,11 +52,15 @@
             </a>
         <!-- Float links to the right. -->
             <div class="w3-right w3-small">	
-                <a id="doge-user" class="btn btn-info" role="button"></a>
+                <a href="#;" id="doge-user" class="btn btn-info" role="button" onclick="document.account.submit()">User</a>
+                <form name = 'account' method = 'POST' action = 'user/'>
+                {% csrf_token %}
+                </form>
             </div> 
 
         </div>
     </div>	
+    <div style = 'margin-bottom: 54px;'></div>
     {% block content %}
     {% endblock %}
 </body>

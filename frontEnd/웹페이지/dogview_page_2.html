@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<!-- 강아지 조회 페이지 2 -->
+		<title> Dog View Page 2 </title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		
+	<style>
+		
+		* {
+			box-sizing: border-box;
+		}
+		
+		.column {
+			float: left;
+			width: 33.33%;
+			max-width: 600px;
+			padding: 5px;
+			margin-left: 5px;
+			margin-bottom: 5px;
+			text-align: center;	
+		}
+		
+		.row {
+			content: "";
+			clear: both;
+			display: table;
+		}	
+		
+	</style>
+	</head>	
+	
+	<body>
+	<!-- Navbar (fixed on top) 내비게이션 바 (위쪽에 고정) -->
+		<div class="w3-top">
+			<div class="w3-bar w3-white w3-wide w3-padding w3-card">
+				<a href="main_page.html" class="w3-bar-item w3-button">
+					<b>Doge</b>
+					gram
+				</a>
+			
+			<!-- Float links to the right. -->
+				<div class="w3-right">	
+					<a href="userinfo_page.html" class="w3-bar-item w3-button"> User Info </a>
+					<a href="find_page.html" class="w3-bar-item w3-button"> Find </a>
+					<a href="register_page.html" class="w3-bar-item w3-button"> Register </a>
+					<a href="rehome_page.html" class="w3-bar-item w3-button"> Rehome </a>
+				</div> 
+			</div>
+		</div>	
+		
+		<br><br>
+		
+	<!-- 강아지 조회 정보 -->
+	<div class="w3-container w3-padding-32" id="dogView">
+		<h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"> </h3>
+		
+		<div class="row">
+			<div class="column">
+				<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\bulldog.jpg" style="width:100%; height: auto;" >
+			</div>
+			<div class="column">
+				<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\bulldog_2.jpg" style="width:100%; height: auto;">
+			</div>
+		</div>
+		<br><br>
+		
+		<p><label><b>Name:</b> Chubber</label>
+		</p>
+		
+		<p><label><b>Gender:</b> Male</label>
+		</p>
+		
+		<p><label><b>Breed:</b> Bulldog</label>
+		</p>
+		
+		<p><label><b>Color:</b> White</label>
+		</p>
+		<br>
+		
+		<p><label><b>Family Tree</b></label>
+		</p>
+		
+		<div class="row">
+			<div class="column">
+				<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\bulldog_father.jpg" style="width:100%">
+				<p>Father (Rowdy)</p>
+			</div>
+			<div class="column">
+				<img src="C:\Users\Administrator\Documents\dogeProject\frontEnd\강아지 이미지\bulldog_mother.jpg" style="width:100%">
+				<p>Mother (Casey)</p>
+			</div>
+		</div>	
+
+<script>
+	
+
+</script>
+
+</body>
+
+</html>

@@ -15,14 +15,14 @@ class searchForm(forms.Form):
     ageEnd = forms.IntegerField(min_value = 0)
     gender = forms.TypedChoiceField(choices = gender_choice, coerce = bool)
 
+def main(request):
+    return render(request, 'trade/main.html')
+
 def index(request):
-    waiting_indexs = [0] # reversed(contract.functions.showWattingTrade().call()[-10:])
+    waiting_indexs = reversed(contract.functions.showWattingTrade().call()[-10:])
     waiting_list = []
     for id in waiting_indexs:
         waiting_list.append(contract.functions.showTrade(id).call())
-        print(waiting_list[0])
-        for i in range(6):
-            print(waiting_list[0][i])
     context = {
         # 사이드 컨텍스트 메뉴에 들어갈 콘텐츠
         'breeds': getBreed(),
@@ -30,4 +30,9 @@ def index(request):
         # 본문에 들어갈 콘텐츠
         'waiting_list': waiting_list
     }
+    try:
+        context['alertMsg'] = request.session['alertMsg']
+        del request.session['alertMsg']
+    except:
+        pass
     return render(request, 'index.html', context = context)

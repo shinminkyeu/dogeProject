@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<script>
+    $(document).ready(() => {
+        $('form[name=account]').remove()
+        $('#doge-user').remove()
+        {% if doesJoin %}
+            $('#varMsg').text('계좌의 정보를 등록합니다.')
+        {% else %}
+            $('#varMsg').text('계좌의 정보를 수정합니다.')
+        {% endif %}
+    })
+</script>
+<div>
+    {{ address }} <span id = 'varMsg'></span>
+</div>
+<form method = 'POST'>
+    {% csrf_token %}
+    {{ form }}
+    <input type = 'submit' value = '정보 등록'>
+</form>
+{% endblock  %}
