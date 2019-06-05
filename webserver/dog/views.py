@@ -47,6 +47,7 @@ def info(request, dog_id):
     else:
         dogDapp, dogDB, dogPicture = findDog(dog_id)
         context = {
+            'isOwner' : True,
             'dogDapp' : dogDapp,
             'dogDB' :   dogDB,
             'dogPicture'    : dogPicture,
