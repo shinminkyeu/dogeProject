@@ -16,7 +16,7 @@
 </head>
 <script>
     let contract;
-    const contractAddress = "0xb3da206021b55620ca77a75d71111e4710955d3d";
+    const contractAddress = "0x3689cc48da9dbe4070cb660adb6ae9e88640a3e5";
     $(document).ready(async () => {
         if (ethereum) { // 최신 메타마스크라면,
             const web3 = new Web3(ethereum);
@@ -33,27 +33,28 @@
         // contract 객체 할당
         contract = web3.eth.contract(doge_ABI).at(contractAddress);
         // 홈버튼 할당
-        $('#doge-home').attr('href', '//' + location.hostname);
         // 유저버튼 할당
         $('form[name=account]')
         .append('<input type="hidden" name="address" value='+web3.eth.accounts[0]+'>');
+        /*
         {% if alertMsg %}
-        alert('{{ alertMsg }}');
+        alert('{{ alertMsg }}')
         {% endif %}
+        */
     });
 </script>
 <body>
     <!-- Navbar (fixed on top) 내비게이션 바 (위쪽에 고정) -->
     <div class="w3-top">
         <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-            <a id="doge-home" class="w3-bar-item w3-button">
+            <a href="{% url 'trade:index' %}" id="doge-home" class="w3-bar-item w3-button">
                 <b>Doge</b>
                 gram
             </a>
         <!-- Float links to the right. -->
             <div class="w3-right w3-small">	
                 <a href="#;" id="doge-user" class="btn btn-info" role="button" onclick="document.account.submit()">User</a>
-                <form name = 'account' method = 'POST' action = 'user/'>
+                <form name = 'account' method = 'POST' action = "{% url 'user:verify' %}">
                 {% csrf_token %}
                 </form>
             </div> 
