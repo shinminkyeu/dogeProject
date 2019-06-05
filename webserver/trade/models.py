@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from contract import contract, getTradeState
 from resources import s3_Path
-from dog.models import Dog, getRepresentedPictureOfDog
+from dog.models import Dog, getFirstPictureOfDog
 
 # 거래 이미지에 대한 이름 정책 (거래 id/이미지 일련번호.확장자)
 def img_name_policy(instance, filename):
@@ -61,11 +61,10 @@ def getThumbnailOfTrade(trade_id):
 def getTradeThumbnailImage(trade_id, dog_id):
     result = ''
     tradeImage = TradeImage.objects.filter(trade = trade_id)
-    dog = Dog.objects.get(pk = dog_id)
     if tradeImage:
         result = s3_Path + tradeImage[0]
     else:
-        dog_picture = getRepresentedPictureOfDog(dog)
+        dog_picture = getFirstPictureOfDog(dog_id)
         if dog_picture:
             result = dog_picture
     return result

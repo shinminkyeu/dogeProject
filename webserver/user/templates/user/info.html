@@ -3,14 +3,14 @@
 {% block content %}
     <div>
         <p>
-            {{ User.user_name }}
+            {{ fromDB.user_name }}
         </p>
         <p>
-            {{User.user_region}}
+            {{fromDB.user_region}}
         </p>
         {% if owner %}
             <p>
-                {{ User.user_contact }}
+                {{ fromDB.user_contact }}
             </p>
             <script>
                 $(document).ready(() => {

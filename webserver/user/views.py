@@ -76,8 +76,8 @@ def verify(request):
 
 def info(request, user_addr):
     context = {
-        'User': get_object_or_404(User, pk = user_addr),
-        'Thumbnails': getThumbnailsFromAddress(user_addr)
+        'fromDB': get_object_or_404(User, pk = user_addr),
+        'Externals': getThumbnailsFromAddress(user_addr)
     }
     if hash(user_addr) == hash(request.session.get('account')):
         context['owner'] = True

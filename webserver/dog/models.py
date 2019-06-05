@@ -22,8 +22,6 @@ class Dog(models.Model):
     dog_name = models.CharField(max_length = 100, null = True, blank = True)
     # 개 등록 사진의 일련번호
     dog_picture_counter = models.PositiveSmallIntegerField(default = 0)
-    # 개 대표 사진의 일련번호 (0이면 대표사진이 없도록 해야 하나..?)
-    dog_picture_represented = models.PositiveSmallIntegerField(default = 0)
     # 개의 털길이(Enum)
     dog_coat_length = models.PositiveSmallIntegerField(null = True, blank = True)
     # 개의 털색깔(String)
@@ -60,20 +58,13 @@ def getBreed(_size=10):
 def getThumbnailOfDog(dog_id):
     dog = Dog.objects.get(pk = dog_id)
     dog_thumbnail = { 'name': dog.dog_name }
-    dog_picture_path = getRepresentedPictureOfDog(dog)
+    dog_picture_path = getFirstPictureOfDog(dog_id)
     if dog_picture_path:
         dog_thumbnail['picture'] = dog_picture_path
     return dog_thumbnail
 
-def getRepresentedPictureOfDog(current_dog):
-    dog_id = current_dog.dog_id
-    represented_index = current_dog.dog_picture_represented
+def getFirstPictureOfDog(dog_id):
     dog_pictures = Picture.objects.filter(dog = dog_id)
-    dog_picture_path = ''
     if dog_pictures.exists():
-        dog_picture_path = s3_Path
-        if represented_index:
-            dog_picture_path += dog_pictures[represented_index - 1].picture_url
-        else:
-            dog_picture_path += dog_pictures[0].picture_url
-    return dog_picture_path
+        dog_picture_path = s3_Path + dog_pictures[0].picture_url
+    return ''
